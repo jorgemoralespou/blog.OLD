@@ -7,7 +7,6 @@ read_time: 10 minutes
 categories: [devexp]
 tags: [openshift,origin,builds,springboot,java,maven,s2i,gradle]
 excerpt: "e live in a polyglot world where developers are using a vast array of different technologies to create applications that perform well, while also having the ability to scale to meet the demands of their application users"
-excerpt_separator: "<!--more-->"
 ---
 = Using OpenShift for Enterprise Grade Spring Boot Deployments
 

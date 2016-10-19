@@ -7,12 +7,11 @@ read_time: 5 minutes
 categories: [devexp]
 tags: [openshift,origin,config,configmap]
 excerpt: "In a real world, your applications will be transitioning from environment to environment, from development to testing and into production, as part of their lifecycle...."
-excerpt_separator: "<!--more-->"
 ---
 = Configuring your application, Part 2
 
 In a real world, your applications will be transitioning from environment to environment, from development to testing and into production, as part of their lifecycle. In a container world, applications are assembled into one or many container images, hence what will be promoted are images.
-<!--more-->
+
 In this blog I will demonstrate link:http://blog.openshift.com/configuring-your-application-part-1[the concepts we learnt about externalizing configuration] in your image promotion scenarios.
 As Veer link:https://blog.openshift.com/promoting-applications-across-environments/[has previously showed], OpenShift is a platform where we can easily model the concept of stages/environments per application, and we can promote an application (image) from environment to environment just by tagging it accordingly in the project.
 
@@ -68,7 +67,7 @@ Since we are fans of fine grained security, I will be creating a new role, image
 [source,json]
 ----
 $ oc login 10.2.2.2:8443 -u admin -p admin
-$ oc create -f - <<EOF
+$ oc create -f - < < EOF
 {
       "kind": "ClusterRole",
       "apiVersion": "v1",

@@ -7,7 +7,6 @@ read_time: 6 minutes
 categories: [devexp]
 tags: [openshift,origin,config,configmap]
 excerpt: "Kubernetes 1.2, released more than a month ago, has brought many interesting additions to the Kubernetes platform, but there’s one, that relates to configuration management, that’s especially relevant for application developers..."
-excerpt_separator: "<!--more-->"
 ---
 = Configuring your application, Part 1
 

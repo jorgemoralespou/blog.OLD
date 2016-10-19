@@ -7,9 +7,7 @@ read_time: 35 minutes
 categories: [devexp]
 tags: [openshift,origin,applications,templates]
 excerpt: "This is Part 2 of a 2 part series of blogs that will help you bringing your applications into OpenShift.
-
 Now that we already know what is a template..."
-excerpt_separator: "<!--more-->"
 ---
 = Part 2: Create a template. A technical walkthrough
 

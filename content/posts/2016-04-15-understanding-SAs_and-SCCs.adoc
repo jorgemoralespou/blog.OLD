@@ -7,7 +7,6 @@ read_time: 8 minutes
 categories: [devexp]
 tags: [openshift,origin,scc]
 excerpt: "We launched OpenShift 3.0 back in June 2015 and I have had the pleasure of speaking with users all over Europe and the EMEA region to help them"
-excerpt_separator: "<!--more-->"
 ---
 = Understanding Service Accounts and SCCs
 

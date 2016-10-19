@@ -7,7 +7,6 @@ read_time: 15 minutes
 categories: [devexp]
 tags: [openshift,origin,builds,maven,java,nexus]
 excerpt: "Since we released OpenShift 3 back in July 2015 one of the most common questions I get from developers is how to get better build time for Java based builds..."
-excerpt_separator: "<!--more-->"
 ---
 = Improving Build Time of Java Builds on OpenShift
 Since we released OpenShift 3 back in July 2015 one of the most common questions I get from developers is how to get better build time for Java based builds. In this post I will guide you through the process of speeding up Java Maven based builds and will explain other options that can be taken to the ones that I'll be showing.

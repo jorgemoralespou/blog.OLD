@@ -7,15 +7,12 @@ read_time: 6 minutes
 categories: [devexp]
 tags: [openshift,origin,applications,templates]
 excerpt: "This is Part 1 of a 2 part series of blogs that will help you bringing your applications into OpenShift...."
-excerpt_separator: "<!--more-->"
 ---
 = Part 1: From app to OpenShift
 
 This is Part 1 of a 2 part series of blogs that will help you bringing your applications into OpenShift.
 
 OpenShift 3 allows you to deploy your application to the cloud and the great thing is it doesn’t matter if your cloud is public, private, or even hybrid. Typically, the PaaS platform (OpenShift in this case) will provide a set of predefined runtimes that a developer can use to deploy an application on top of. This developer does not need to worry about the infrastructure, the runtime setup, or the configuration, he/she would just need to focus on their application, and what runtime to use. The PaaS platform will take care of sewing it all together and running it.
-
-<!--more-->
 
 However, sometimes not all the runtimes are provided by the PaaS platform, or that the usages of these runtimes are not suitable for every application type, and there is a need for the PaaS provider to facilitate these to their users.
 
