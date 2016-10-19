@@ -1,0 +1,818 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- begin SEO -->
+    <title>Learn the Origin</title>
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Learn the Origin">
+    <meta property="og:title" content="Learn the Origin">
+    <link rel="canonical" href="http://jorgemoral.es/">
+    <meta property="og:url" content="http://jorgemoral.es/">
+    <meta name="twitter:site" content="@UnPOUcoDe">
+    <meta name="twitter:title" content="Learn the Origin">
+    <meta name="twitter:description" content="Touching containers, orchestration and application development properly mixed with a little touch of real life experience">
+    <meta name="twitter:url" content="http://jorgemoral.es/">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Person",
+            "name": "Jorge Morales Pou",
+            "url": "http://jorgemoral.es",
+            "sameAs": ["https://twitter.com/UnPOUcoDe", "https://www.linkedin.com/in/jorgemoralespou", "https://github.com/jorgemoralespou"]
+        }
+    </script>
+    <!-- end SEO -->
+    <link href="http://jorgemoral.es/feed.xml" type="application/atom+xml" rel="alternate" title="Learn the Origin Feed">
+    <title>jorgemoral.es ::
+        Home
+    </title>
+    <!--
+    <link rel="stylesheet" href="/css/stylesheet.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    -->
+    <meta name="generator" content="Nanoc 4.3.4">
+
+    <!-- For all browsers -->
+    <link rel="stylesheet" href="/css/main.css">
+    <meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+    <!-- insert favicons. use http://realfavicongenerator.net/ -->
+    <link rel="stylesheet" href="/css/asciidoc-pygments.css">
+</head>
+
+<body  class="layout--single">
+    <div class="masthead">
+        <div class="masthead__inner-wrap">
+            <div class="masthead__menu">
+                <nav id="site-nav" class="greedy-nav">
+                    <button><div class="navicon"></div></button>
+                    <ul class="visible-links">
+                        <li class="masthead__menu-item masthead__menu-item--lg"><a href="/">Learn the Origin</a></li>
+                        <li class="masthead__menu-item"><a href="/categories">Categories</a></li>
+                        <li class="masthead__menu-item"><a href="/tags">Tags</a></li>
+                        <li class="masthead__menu-item"><a href="/all-posts">All posts</a></li>
+                        <!--
+                        <li class="masthead__menu-item"><a href="/year-archive">By year</a></li>
+                        -->
+                        <li class="masthead__menu-item"><a href="/presentations">Presentations</a></li>
+                        <li class="masthead__menu-item"><a href="/conferences">Conferences</a></li>
+                        <li class="masthead__menu-item"><a href="/about">About me</a></li>
+                    </ul>
+                    <ul class="hidden-links hidden"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+<!--  USE Breadcrumbs Helper
+
+    <nav class="breadcrumbs">
+      <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.es/" itemprop="item"><span itemprop="name">Home</span></a>
+              <meta itemprop="position" content="1" />
+            </li>
+            <span class="sep">/</span>
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.esdevexp" itemprop="item"><span itemprop="name">Devexp</span></a>
+              <meta itemprop="position" content="2" />
+            </li>
+            <span class="sep">/</span>
+            <li class="current">Configuring your application, Part 2</li>
+      </ol>
+    </nav>
+-->
+
+    <div id="main" role="main">
+        <div class="sidebar sticky">
+            <div itemscope itemtype="http://schema.org/Person">
+                <div class="author__avatar">
+                    <img src="/images/bio-photo.jpg" class="author__avatar" alt="Jorge Morales">
+                </div>
+                <div class="author__content">
+                    <h3 class="author__name">Jorge Morales</h3>
+                    <p class="author__bio">OpenShift Developer Advocate working for Red Hat.<br/>Drop me a tweet if you want me to blog about a topic</p>
+                </div>
+
+                <div class="author__urls-wrapper">
+                    <button class="btn btn--inverse">Follow</button>
+                    <ul class="author__urls social-icons">
+                        <li><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Madrid, Spain</li>
+                        <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                        <li><a href="https://github.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitHub</a></li>
+                        <li><a href="https://gitlab.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitLab</a></li>
+                        <li><a href="https://www.linkedin.com/in/jorgemoralespou"><i class="fa fa-fw fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+<div class="archive">
+    <h1 class="page__title"></h1>
+    <p></p>
+    <h3 class="archive__subtitle">Recent Posts</h3>
+    
+       <div class="list__item">
+           <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+               <h2 class="archive__item-title" itemprop="headline"><a href="/posts/sample.adoc.txt">Title</a></h2>
+               <p class="page__meta">
+                  <i class="fa fa-clock-o" aria-hidden="true"></i> 10 minutes
+                  Posted: 17/Oct/2016 by Jorge Morales
+               </p>
+               <p class="archive__item-excerpt" itemprop="description">Excerpt....</p>
+               <!--
+               <p class="archive__item-excerpt" itemprop="description">Write content here
+</p>
+               -->
+           </article>
+       </div>
+    
+       <div class="list__item">
+           <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+               <h2 class="archive__item-title" itemprop="headline"><a href="/2016/10/ooring_development_cluster/">Development OpenShift</a></h2>
+               <p class="page__meta">
+                  <i class="fa fa-clock-o" aria-hidden="true"></i> 10 minutes
+                  Posted: 17/Oct/2016 by Jorge Morales
+               </p>
+               <p class="archive__item-excerpt" itemprop="description">Excerpt....</p>
+               <!--
+               <p class="archive__item-excerpt" itemprop="description"><div class="paragraph">
+<p>Write content here</p>
+</div></p>
+               -->
+           </article>
+       </div>
+    
+       <div class="list__item">
+           <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+               <h2 class="archive__item-title" itemprop="headline"><a href="/2016/07/configuring-your-app-2/">Configuring your application, Part 2</a></h2>
+               <p class="page__meta">
+                  <i class="fa fa-clock-o" aria-hidden="true"></i> 5 minutes
+                  Posted: 01/Jul/2016 by Jorge Morales
+               </p>
+               <p class="archive__item-excerpt" itemprop="description">In a real world, your applications will be transitioning from environment to environment, from development to testing and into production, as part of their lifecycle....</p>
+               <!--
+               <p class="archive__item-excerpt" itemprop="description"><div class="paragraph">
+<p>In a real world, your applications will be transitioning from environment to environment, from development to testing and into production, as part of their lifecycle. In a container world, applications are assembled into one or many container images, hence what will be promoted are images.</p>
+</div>
+<div class="paragraph">
+<p>In this blog I will demonstrate <a href="http://blog.openshift.com/configuring-your-application-part-1">the concepts we learnt about externalizing configuration</a> in your image promotion scenarios.
+As Veer <a href="https://blog.openshift.com/promoting-applications-across-environments/">has previously showed</a>, OpenShift is a platform where we can easily model the concept of stages/environments per application, and we can promote an application (image) from environment to environment just by tagging it accordingly in the project.</p>
+</div>
+<div class="paragraph">
+<p>In this example, I will be using the same application I used before, and I will create two projects simulating two different stages/environments for my application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>node-app-dev</strong> will model the development stage and will be owned by user <strong>dev</strong></p>
+</li>
+<li>
+<p><strong>node-app-test</strong> will model the testing stage and will be owned by user <strong>test</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This application will be deployed with the exact same BuildConfig in both projects, but for each, a different configuration will be used by means of deploying different values in the ConfigMap. dev user, will have an additional task of building the application from source before deploying it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git clone https://github.com/jorgemoralespou/ose-app-promotion-configmap.git
+
+$ cd ose-app-promotion-configmap/example2
+
+$ oc login 10.2.2.2:8443 -u dev -p dev
+$ oc new-project node-app-dev
+$ oc create -f configmap-dev.json
+$ oc create -f node-app-deployment.json
+$ oc create -f node-app-build.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These commands will create a new project called node-app-dev, as user dev, and will deploy a ConfigMap, with a message and background color that will be used in development environment. Additionally, it will create the deployment configuration for the application and it will build our application from source code.</p>
+</div>
+<div class="paragraph">
+<p>Once the process is finished, we will be able to see the result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/configmaps/node-app-dev.png" alt="Example app in development">
+</div>
+</div>
+<div class="paragraph">
+<p>Now, as user <strong>test</strong>, we will create a ConfigMap with different contents,  reflecting our test environment , but we will use exactly the same DeploymentConfig like before. The reason for that is, we are separating the application from its configuration, by leveraging the ConfigMap resource.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git clone https://github.com/jorgemoralespou/ose-app-promotion-configmap.git
+
+$ cd ose-app-promotion-configmap/example2
+
+$ oc login 10.2.2.2:8443 -u test -p test
+$ oc new-project node-app-test
+$ oc create -f configmap-test.json
+$ oc create -f node-app-build.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this project, there will be no application deployed because no image has been tagged into the test project yet:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/configmaps/node-app-test.png" alt="Example app in test before promotion">
+</div>
+</div>
+<div class="paragraph">
+<p>There is one security requirement to allow dev user to tag into the test project and for a user in test project to pull down the image from the repository.</p>
+</div>
+<div class="paragraph">
+<p>Since we are fans of fine grained security, I will be creating a new role, image-tagger, that will be granted the rights to tag an ImageStream. That role will be assigned to the dev user in the test project. This action needs to be executed as an cluster admin user:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">$ oc login 10.2.2.2:8443 -u admin -p admin
+$ oc create -f - &amp;lt; &amp;lt; EOF
+{
+      "kind": "ClusterRole",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "image-tagger"
+      },
+      "rules": [
+        {
+          "verbs": [
+            "get",
+            "list",
+            "create",
+            "update",
+            "edit"
+          ],
+          "attributeRestrictions": null,
+          "apiGroups": null,
+          "resources": [
+            "imagestreamimages",
+            "imagestreamimports",
+            "imagestreammappings",
+            "imagestreams",
+            "imagestreamtags"
+          ]
+        }
+      ]
+    }
+EOF
+
+$ oc adm policy add-role-to-user image-tagger dev -n node-app-test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Additionally, we also need the user from test project to be able to pull down the image from dev project. But since in OpenShift, by default, the deployment is done by the <strong>deployment</strong> ServiceAccount, we need to assign the role accordingly</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc adm policy add-role-to-user system:image-puller system:serviceaccount:node-app-test:deployer -n node-app-dev</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now that all the required permissions are in place, we can have <strong>dev</strong> user to promote our application. For this he will just tag the image in the node-app-test project, and it will be automatically deployed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc login 10.2.2.2:8443 -u dev -p dev
+$ oc tag node-app-dev/node-app:latest node-app-test/node-app:latest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can now verify that the image has been promoted, and is now running in the testing environment, showing the configuration for this environment.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/configmaps/node-app-test-2.png" alt="Example app in test after promotion">
+</div>
+</div>
+<div class="paragraph">
+<p>In this blog we have demonstrated a way of separating configuration from application so that the process of promoting an application gets easier, requiring almost none customizations of the base resources being deployed.</p>
+</div>
+<div class="paragraph">
+<p>This blog example can be fully executed in the <a href="https://www.openshift.org/vm/">Openshift Origin all-in-one Vagrant image</a>, by doing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git clone https://github.com/jorgemoralespou/ose-app-promotion-configmap.git
+
+$ cd ose-app-promotion-configmap/example2
+
+$ oc login 10.2.2.2:8443 -u dev -p dev
+$ oc new-project node-app-dev
+$ oc create -f configmap-dev.json
+$ oc create -f node-app-deployment.json
+$ oc create -f node-app-build.json
+
+$ oc login 10.2.2.2:8443 -u test -p test
+$ oc new-project node-app-test
+$ oc create -f configmap-test.json
+$ oc create -f node-app-deployment.json
+
+
+$ oc login 10.2.2.2:8443 -u admin -p admin
+$ oc create -f roles.json
+$ oc adm policy add-role-to-user image-tagger dev -n node-app-test
+$ oc adm policy add-role-to-user system:image-puller system:serviceaccount:node-app-test:deployer -n node-app-dev
+
+$ oc login 10.2.2.2:8443 -u dev -p dev
+
+$ echo "If you want to promote the application, you can:"
+$ echo "    oc tag node-app-dev/node-app:latest node-app-test/node-app:latest"</code></pre>
+</div>
+</div></p>
+               -->
+           </article>
+       </div>
+    
+       <div class="list__item">
+           <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+               <h2 class="archive__item-title" itemprop="headline"><a href="/2016/06/configuring-your-app-1/">Configuring your application, Part 1</a></h2>
+               <p class="page__meta">
+                  <i class="fa fa-clock-o" aria-hidden="true"></i> 6 minutes
+                  Posted: 09/Jun/2016 by Jorge Morales
+               </p>
+               <p class="archive__item-excerpt" itemprop="description">Kubernetes 1.2, released more than a month ago, has brought many interesting additions to the Kubernetes platform, but there’s one, that relates to configuration management, that’s especially relevant for application developers...</p>
+               <!--
+               <p class="archive__item-excerpt" itemprop="description"><div class="paragraph">
+<p>Kubernetes 1.2, released more than a month ago, has brought many interesting additions to the Kubernetes platform, but there’s one, that relates to configuration management, that’s especially relevant for application developers, this is <a href="http://kubernetes.io/docs/user-guide/configmap/">ConfigMap</a>. In this blog entry I will share some experiences and tips on using ConfigMap that goes beyond what one of our engineers and Kubernetes contributor, Paul Morie, recently <a href="http://blog.kubernetes.io/2016/04/configuration-management-with-containers.html">blogged about it</a>. We will take advantage of this new feature in a real application that we will be promoting through different environments, from development through testing into production.</p>
+</div>
+<div class="paragraph">
+<p>One of the challenges that we face as developers is the need to externalize application configuration as this will probably be different per environment or per deployment. In OpenShift, Docker, and Kubernetes, developers have been externalizing this configuration into Environment variables, allowing every deployment to have different values for runtime configuration. This has been a fantastic way to adhere to the third rule of the <a href="http://12factor.net/">12factor</a> methodology, “<a href="http://12factor.net/config">store config in the environment</a>”. When you think that what we, as users of OpenShift, are deploying into the platform is not a container but rather an application, that can be composed of one or multiple containers, we understand that the configuration per deployment really spans greater context than the container itself.</p>
+</div>
+<div class="paragraph">
+<p>We need a way of having all the configuration used/needed per application centralized, so that changes in configuration will not impact the definition of the deployment. This is what ConfigMap is for.</p>
+</div>
+<div class="paragraph">
+<p>The official <a href="http://kubernetes.io/docs/user-guide/configmap/">Kubernetes documentation</a> states:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Many applications require configuration via some combination of config files, command line arguments, and environment variables. These configuration artifacts should be decoupled from image content in order to keep containerized applications portable. The ConfigMap API resource provides mechanisms to inject containers with configuration data while keeping containers agnostic of Kubernetes. ConfigMap can be used to store fine-grained information like individual properties or coarse-grained information like entire config files or JSON blobs.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>So, what type of configuration can we provide to an application or deployment?
+It will typically fall under one of these categories:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Single configuration value expressed as an environment variable for the container.</p>
+</li>
+<li>
+<p>Command line arguments in a container.</p>
+</li>
+<li>
+<p>Multiple configuration values typically set in a configuration file.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let’s explore how we can use ConfigMaps:</p>
+</div>
+<div class="paragraph">
+<p>I will demonstrate ConfigMap with a simple node.js app. This application will print a message as body content and will have background color configurable. We will externalize configuration into a ConfigMap. The code for the application is on <a href="https://github.com/jorgemoralespou/ose-app-promotion-configmap/blob/master/node-app/server.js">GitHub</a>.</p>
+</div>
+<div class="paragraph">
+<p>First required thing is to create a ConfigMap to hold the configuration values you want to make available to the deployment. My node.js application will get it’s background color from a property named “color” in a file named “/etc/node-app/node-app.config” in the container. It will also, look for an environment property named message for a string to be show as background message.
+The configuration file contents that will be used is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">color=blue</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let’s create a ConfigMap, named <strong>config</strong>, with both a literal text, message=<strong>Hello world!</strong>, and the configuration file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc create configmap config \
+            --from-literal=message=’Hello world!’ \
+            --from-file=ui.properties
+configmap "config" created</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let’s verify the contents of our ConfigMap.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">$ oc get configmap/config -o json
+{
+    "kind": "ConfigMap",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "config",
+    },
+    "data": {
+        "message": "Hello world!",
+        "ui.properties": "color=blue\n"
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Some internal metadata has been removed from output for brevity.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now that I have a ConfigMap with the configuration my application requires, I’m going to deploy an application that will make use of it.</p>
+</div>
+<div class="paragraph">
+<p>In my <a href="https://github.com/jorgemoralespou/ose-app-promotion-configmap/blob/master/node-app/server.js">sample app</a>, I will consume the configuration provided by the ConfigMap, mapping the ConfigMap property <strong>message</strong> to the environment variable <strong>BACKGROUND_MSG</strong> the application expects, and also mapping the <strong>ui.properties</strong> into a file located in <strong>/etc/node-app/node-app.config</strong>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json"> "template": {
+   "metadata": {
+      "labels": {
+         "app": "node-app",
+         "deploymentconfig": "node-app"
+      }
+   },
+   "spec": {
+      "containers": [
+         {
+            "name": "node-app",
+            "image": "node-app",
+            "ports": [
+               {
+                  "containerPort": 8080,
+                  "protocol": "TCP"
+               }
+            ],
+            "env": [
+               {
+                  "name": "OPENSHIFT_NODEJS_PORT",
+                   "value": "8080"
+               },
+               {
+                  "name": "BACKGROUND_MESSAGE",
+                  "valueFrom": {
+                     "configMapKeyRef": {
+                        "name": "config",
+                        "key": "message"
+                      }
+                   }
+                }
+             ],
+             "volumeMounts":[
+                {
+                   "name": "app-config",
+                   "mountPath": "/etc/node-app/"
+                }
+             ],
+             "resources": {},
+             "terminationMessagePath": "/dev/termination-log",
+             "imagePullPolicy": "Always"
+           }
+        ],
+        "volumes": [
+           {
+              "name": "app-config",
+              "configMap": {
+                 "name": "config",
+                 "items": [
+                    {
+                       "key": "ui.properties",
+                       "path": "node-app.config"
+                    }
+                 ]
+              }
+           }
+        ],
+        "restartPolicy": "Always",
+        "terminationGracePeriodSeconds": 30,
+        "dnsPolicy": "ClusterFirst",
+        "securityContext": {}
+     }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configuration is assembled at deployment time, so when the application is deployed and there is no ConfigMap that satisfies the DeploymentConfig, we will have a warning event in our Event log that will help us diagnose the misconfiguration that prevented the deployment to start:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/configmaps/configmap-example-error.png" alt="Misconfiguration">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/configmaps/configmap-example.png" alt="ConfigMap example">
+</div>
+</div>
+<div class="paragraph">
+<p>One important thing to know is, when a ConfigMap is mounted as a volume, we can change the contents of the ConfigMap, and the mounted file in the container will be eventually updated, when the kubelet on the node re-synchs the pod, providing for changes in configuration in running containers. The running application needs to provide a mechanism to reload configuration changes when they happen.</p>
+</div>
+<div class="paragraph">
+<p>In this blog we have demonstrated a way of externalizing configuration of an application. Remember, ConfigMaps are GA in Kubernetes 1.2 and OpenShift 3.2 and some improvements are still to come. Just take these simple <strong>restrictions</strong> into account:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ConfigMaps must be created before they are consumed in pods.</p>
+</li>
+<li>
+<p>ConfigMaps reside in a namespace. They can only be referenced by pods in the same namespace.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The example shown in this blog can be fully executed in the Openshift Origin all-in-one Vagrant image, by doing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git clone https://github.com/jorgemoralespou/ose-app-promotion-configmap.git
+$ cd ose-app-promotion-configmap/example1
+$ oc new-project configmap-example
+$ oc create -f configmap-example.json
+$ oc create -f node-app-deployment.json
+$ oc create -f node-app-build.json</code></pre>
+</div>
+</div>
+<div class="videoblock">
+<div class="content">
+<iframe src="https://www.youtube.com/embed/vKDLz2OXu7k?rel=0" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="http://www.youtube.com/watch?v=vKDLz2OXu7k">See a video in action</a></p>
+</div></p>
+               -->
+           </article>
+       </div>
+    
+       <div class="list__item">
+           <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+               <h2 class="archive__item-title" itemprop="headline"><a href="/2016/04/understanding-SAs_and-SCCs/">Understanding Service Accounts and SCCs</a></h2>
+               <p class="page__meta">
+                  <i class="fa fa-clock-o" aria-hidden="true"></i> 8 minutes
+                  Posted: 15/Apr/2016 by Jorge Morales
+               </p>
+               <p class="archive__item-excerpt" itemprop="description">We launched OpenShift 3.0 back in June 2015 and I have had the pleasure of speaking with users all over Europe and the EMEA region to help them</p>
+               <!--
+               <p class="archive__item-excerpt" itemprop="description"><div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>We launched OpenShift 3.0 back in June 2015 and I have had the pleasure of speaking with users all over Europe and the EMEA region to help them get up and running with deploying applications on the platform. One of the features that developers and administrator often ask questions about are Service Accounts and Security Context Constraints. In this blog post, I will provide a simple introduction into both concepts, how they work and their usage.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_security_context_constraints_scc">Security Context Constraints (SCC)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="https://docs.openshift.org/latest/architecture/additional_concepts/authorization.html#security-context-constraints">official documentation states</a>:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>OpenShift provides security context constraints (SCC) that control the actions that a pod can perform and what it has the ability to access.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>In short, when we execute a container, we want to guarantee that the capabilities required by that container to run are satisfied, while at the same time we also want OpenShift to be a secure Container Application platform. For this reason we can not allow any container to get access to unnecessary capabilities or to run in an insecure way (e.g. privileged or as root).</p>
+</div>
+<div class="paragraph">
+<p>OpenShift guarantees that the capabilities required by a container are granted to the user that executes the container at <a href="https://docs.openshift.org/latest/architecture/additional_concepts/authorization.html#admission">admission time</a>. Admission is done based on the identity of the user executing the pod and the pod’s service account (introduced later in this blog).</p>
+</div>
+<div class="paragraph">
+<p>The OpenShift Container Application Platform provides a set of predefined Security Context Constraints that can be used, modified or extended by any administrator. The SCCs that can be used are as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc get scc
+NAME              PRIV   CAPS  HOSTDIR  SELINUX    RUNASUSER         FSGROUP   SUPGROUP  PRIORITY
+anyuid            false  []    false    MustRunAs  RunAsAny          RunAsAny  RunAsAny  10
+hostaccess        false  []    true     MustRunAs  MustRunAsRange    RunAsAny  RunAsAny  &lt;none&gt;
+hostmount-anyuid  false  []    true     MustRunAs  RunAsAny          RunAsAny  RunAsAny  &lt;none&gt;
+nonroot           false  []    false    MustRunAs  MustRunAsNonRoot  RunAsAny  RunAsAny  &lt;none&gt;
+privileged        true   []    true     RunAsAny   RunAsAny          RunAsAny  RunAsAny  &lt;none&gt;
+restricted        false  []    false    MustRunAs  MustRunAsRange    RunAsAny  RunAsAny  &lt;none&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, the execution of any container will be granted the <strong>restricted</strong> SCC and only the capabilities defined by that SCC.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc describe scc restricted
+Name:                restricted
+Priority:               &lt;none&gt;
+Access:
+  Users:             &lt;none&gt;
+  Groups:               system:authenticated
+Settings:
+  Allow Privileged:        false
+  Default Add Capabilities:      &lt;none&gt;
+  Required Drop Capabilities:    KILL,MKNOD,SYS_CHROOT,SETUID,SETGID
+  Allowed Capabilities:       &lt;none&gt;
+  Allowed Volume Types:       configMap,downwardAPI,emptyDir,persistentVolumeClaim,secret
+  Allow Host Network:         false
+  Allow Host Ports:        false
+  Allow Host PID:          false
+  Allow Host IPC:          false
+  Read Only Root Filesystem:     false
+  Run As User Strategy:             MustRunAsRange
+    UID:             &lt;none&gt;
+    UID Range Min:            &lt;none&gt;
+    UID Range Max:            &lt;none&gt;
+  SELinux Context Strategy:         MustRunAs
+    User:               &lt;none&gt;
+    Role:               &lt;none&gt;
+    Type:               &lt;none&gt;
+    Level:              &lt;none&gt;
+  FSGroup Strategy:                 MustRunAs
+    Ranges:             &lt;none&gt;
+  Supplemental Groups Strategy:     RunAsAny
+    Ranges:             &lt;none&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As can be seen in the previous description of the <strong>restricted</strong> SCC, a list of users and groups can be specified. In order to grant a user or group a specific SCC, a cluster administrator can execute the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oadm policy add-user-to-scc &lt;scc_name&gt; &lt;user_name&gt;
+$ oadm policy add-group-to-scc &lt;scc_name&gt; &lt;group_name&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_service_accounts">Service Accounts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="https://docs.openshift.org/latest/dev_guide/service_accounts.html">official documentation states</a>:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>When a person uses the command line or web console, their API token authenticates them to the OpenShift API. However, when a regular user’s credentials are not available, it is common for components to make API calls independently. For example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Replication controllers make API calls to create or delete pods</p>
+</li>
+<li>
+<p>Applications inside containers could make API calls for discovery purposes</p>
+</li>
+<li>
+<p>External applications could make API calls for monitoring or integration purposes</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Service accounts provide a flexible way to control API access without sharing a regular user’s credentials</strong>.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>As you can see, there are many use cases for Service Accounts, and if we dive into the first use case aforementioned, we need to understand that OpenShift (and Kubernetes) are not synchronous in the execution of their commands.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/sa_scc/Eventual_consistency.png" alt="Asynch state consolidation">
+</div>
+</div>
+<div class="paragraph">
+<p>When a user wants to deploy an application, he creates a DeploymentConfig resource, which describes a desired state (as can be seen in the picture above - step 1). From this point, a set of controllers (admission, replication controller, scheduler,&#8230;&#8203;), running on the master server, will be monitoring those definitions and will execute necessary actions on the OpenShift platform in order to provide consistency between the desired and actual state (as can be seen in the picture above - step 2). This will happen as soon as the controllers try to consolidate the cluster state.</p>
+</div>
+<div class="paragraph">
+<p>What this really means is, the actions are executed by the OpenShift controllers and not by the actual user, that expressed the desired state. This leads to the situation where we need to identify who&#8217;s executing the actions the controllers are invoking.</p>
+</div>
+<div class="paragraph">
+<p>By default, OpenShift creates three service accounts per project for building, deploying and running an application (see <a href="https://docs.openshift.org/latest/dev_guide/service_accounts.html#default-service-accounts-and-roles">the official documentation</a> for more details).</p>
+</div>
+<div class="paragraph">
+<p>When a user creates anyobject in OpenShift it will use these default Service Accounts, but a different one can be specified within the object configuration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">{
+   "kind": "DeploymentConfig",
+   "apiVersion": "v1",
+   "metadata": {...},
+   "spec": {
+      ...
+      "template": {
+         ...
+         "spec":{
+            "containers": [
+            ],
+            ...
+            "serviceAccountName": "myserviceaccount"
+         }
+      }
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One reason to use a dedicated service account in a deployment configuration is to allow an application running within a pod to use a set of privileges or capabilities other than those granted by the <strong>default</strong> service account. This default service account will only have access to all the capabilities defined by the <strong>restricted</strong> SCC, as out of the box OpenShift will add every authenticated user to the restricted SCC (as can bee seen in the output of the execution of “oc describe scc restricted” shown above). This includes the default service account which is not explicitly included in any other SCC.</p>
+</div>
+<div class="paragraph">
+<p>Since every service account has an associated username, it can be added to any specific SCC in a similar way as we have done previously with users and groups.</p>
+</div>
+<div class="paragraph">
+<p>As an example, we might want to run an application that needs access to mount hostPath volumes, or we might want to run an application with a specified user and not a random user OpenShift will use as default (as detailed in <a href="https://blog.openshift.com/getting-any-docker-image-running-in-your-own-openshift-cluster/">this blog</a>), or we might want to restrict the container&#8217;s filesystem to be readonly, and forcing every write to be on external storage. There are many other situations that might require us to change the capabilities provided by default.</p>
+</div>
+<div class="paragraph">
+<p>This leads to the conclusion of this blog with my advice:</p>
+</div>
+<div class="paragraph">
+<p>“Every time you have an application/process that requires a capability not granted by the restricted SCC, create a new, specific service account and add it to the appropriate SCC. But, if there is no SCC that perfectly suits your needs, instead of using the best fit one, <a href="https://docs.openshift.org/latest/admin_guide/manage_scc.html#creating-new-security-context-constraints">create a new SCC</a> tailored for your requirements, and finally set it for the deployment configuration (as described above).”</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc create serviceaccount useroot
+
+$ oc patch dc/myAppNeedsRoot --patch '{"spec":{"template":{"spec":{"serviceAccountName": "useroot"}}}}'
+
+$ oc adm policy add-scc-to-user anyuid -z useroot</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Above you can see my advice in action, creating a new service account named <em>useroot</em>, modifying the deployment configuration for <em>myAppNeedsRoot</em> and then adding the serviceaccount to the <em>anyuid</em> SCC as the application defined needs to run as user root in the container. Note that I haven&#8217;t created a specific SCC since anyuid meets my needs.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The previous example is using notation available in OpenShift Origin 1.1.4+ and OpenShift Enterprise 3.2+.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>I’ve seen many users granting access to a user/serviceaccount to the privileged SCC to avoid going through this exercise, and this is can be a big security problem, so take my word of caution.
+&lt;/group_name&gt;&lt;/scc_name&gt;&lt;/user_name&gt;&lt;/scc_name&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;</p>
+</div>
+</div>
+</div></p>
+               -->
+           </article>
+       </div>
+    
+</div>
+
+    </div>
+
+    <div class="page__footer">
+        <footer>
+            <!-- start custom footer snippets -->
+            <!-- end custom footer snippets -->
+            <div class="page__footer-follow">
+                <ul class="social-icons">
+                    <li><strong>Follow:</strong></li>
+                    <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                    <li><a href="http://jorgemoral.es/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+                </ul>
+            </div>
+            <div class="page__footer-copyright">&copy; 2016 Jorge Morales Pou.</div>
+        </footer>
+    </div>
+    <script src="/js/main.min.js"></script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-81343831-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+
+</html>

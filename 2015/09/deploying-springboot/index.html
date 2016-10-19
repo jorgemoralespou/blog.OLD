@@ -1,0 +1,472 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- begin SEO -->
+    <title>Learn the Origin</title>
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Learn the Origin">
+    <meta property="og:title" content="Learn the Origin">
+    <link rel="canonical" href="http://jorgemoral.es/">
+    <meta property="og:url" content="http://jorgemoral.es/">
+    <meta name="twitter:site" content="@UnPOUcoDe">
+    <meta name="twitter:title" content="Learn the Origin">
+    <meta name="twitter:description" content="Touching containers, orchestration and application development properly mixed with a little touch of real life experience">
+    <meta name="twitter:url" content="http://jorgemoral.es/">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Person",
+            "name": "Jorge Morales Pou",
+            "url": "http://jorgemoral.es",
+            "sameAs": ["https://twitter.com/UnPOUcoDe", "https://www.linkedin.com/in/jorgemoralespou", "https://github.com/jorgemoralespou"]
+        }
+    </script>
+    <!-- end SEO -->
+    <link href="http://jorgemoral.es/feed.xml" type="application/atom+xml" rel="alternate" title="Learn the Origin Feed">
+    <title>jorgemoral.es ::
+        Using OpenShift for Enterprise Grade Spring Boot Deployments
+    </title>
+    <!--
+    <link rel="stylesheet" href="/css/stylesheet.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    -->
+    <meta name="generator" content="Nanoc 4.3.4">
+
+    <!-- For all browsers -->
+    <link rel="stylesheet" href="/css/main.css">
+    <meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+    <!-- insert favicons. use http://realfavicongenerator.net/ -->
+    <link rel="stylesheet" href="/css/asciidoc-pygments.css">
+</head>
+
+<body  class="layout--single">
+    <div class="masthead">
+        <div class="masthead__inner-wrap">
+            <div class="masthead__menu">
+                <nav id="site-nav" class="greedy-nav">
+                    <button><div class="navicon"></div></button>
+                    <ul class="visible-links">
+                        <li class="masthead__menu-item masthead__menu-item--lg"><a href="/">Learn the Origin</a></li>
+                        <li class="masthead__menu-item"><a href="/categories">Categories</a></li>
+                        <li class="masthead__menu-item"><a href="/tags">Tags</a></li>
+                        <li class="masthead__menu-item"><a href="/all-posts">All posts</a></li>
+                        <!--
+                        <li class="masthead__menu-item"><a href="/year-archive">By year</a></li>
+                        -->
+                        <li class="masthead__menu-item"><a href="/presentations">Presentations</a></li>
+                        <li class="masthead__menu-item"><a href="/conferences">Conferences</a></li>
+                        <li class="masthead__menu-item"><a href="/about">About me</a></li>
+                    </ul>
+                    <ul class="hidden-links hidden"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+<!--  USE Breadcrumbs Helper
+
+    <nav class="breadcrumbs">
+      <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.es/" itemprop="item"><span itemprop="name">Home</span></a>
+              <meta itemprop="position" content="1" />
+            </li>
+            <span class="sep">/</span>
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.esdevexp" itemprop="item"><span itemprop="name">Devexp</span></a>
+              <meta itemprop="position" content="2" />
+            </li>
+            <span class="sep">/</span>
+            <li class="current">Configuring your application, Part 2</li>
+      </ol>
+    </nav>
+-->
+
+    <div id="main" role="main">
+        <div class="sidebar sticky">
+            <div itemscope itemtype="http://schema.org/Person">
+                <div class="author__avatar">
+                    <img src="/images/bio-photo.jpg" class="author__avatar" alt="Jorge Morales">
+                </div>
+                <div class="author__content">
+                    <h3 class="author__name">Jorge Morales</h3>
+                    <p class="author__bio">OpenShift Developer Advocate working for Red Hat.<br/>Drop me a tweet if you want me to blog about a topic</p>
+                </div>
+
+                <div class="author__urls-wrapper">
+                    <button class="btn btn--inverse">Follow</button>
+                    <ul class="author__urls social-icons">
+                        <li><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Madrid, Spain</li>
+                        <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                        <li><a href="https://github.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitHub</a></li>
+                        <li><a href="https://gitlab.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitLab</a></li>
+                        <li><a href="https://www.linkedin.com/in/jorgemoralespou"><i class="fa fa-fw fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+<article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <div class="page__inner-wrap">
+        <header>
+            <h1 class="page__title" itemprop="headline">Using OpenShift for Enterprise Grade Spring Boot Deployments</h1>
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                10 minutes
+                    Posted:
+                    03/Sep/2015 by
+                        Jorge Morales
+            </p>
+        </header>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>We live in a polyglot world where developers are using a vast array of different technologies to create applications that perform well, while also having the ability to scale to meet the demands of their application users. Of course, it is very easy to show the supported languages and runtimes that OpenShift provides out of the box, but to be realistic, many developers would like to see how we can bring other leading technologies into OpenShift and use them seamlessly. We built OpenShift 3 around Docker to embrace a standard container runtime and packaging format and give OpenShift developers access to the huge ecosystem of Docker-packaged software stacks. Kubernetes then adds web scale orchestration to OpenShift, which is critical for deploying complex microservices that span multiple containers across multiples hosts. As a result, the ability to run virtually any runtime or framework on the OpenShift platform is now a reality.</p>
+</div>
+<div class="paragraph">
+<p>Today, I’ve decided to create an application (to be more precise a set of microservices) using the popular Spring Boot technology and deploy it on OpenShift 3. In this post, I’m going to walk you through all of the steps required, as well as provide the source code so you can see it in action by yourself and customize/extend it to your needs.</p>
+</div>
+<div class="paragraph">
+<p>This is a summary of what I’m going to show:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Creating a Source-to-Image (S2I) builder image for Spring Boot based applications</p>
+</li>
+<li>
+<p>Deploying a sample set of applications developed with Spring Boot</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let’s get our hands dirty and start playing with some of this technology.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spring_boot_s2i_builder">Spring Boot S2I Builder</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Boot applications are really very similar in structure to any other Java application. The main difference, apart from the libraries you use, is that it will pack everything as a single fat jar that will be run directly by the JVM. All of the runtime, libraries, dependencies and code will be embedded into this single jar file.</p>
+</div>
+<div class="paragraph">
+<p>OpenShift S2I automatically generates a new Docker image for deployment, using source code provided by the developer and a corresponding Docker builder image in OpenShift. I used what <a href="https://twitter.com/soltysh"><em>Maciej Szulik</em></a> showed in his <a href="https://blog.openshift.com/create-s2i-builder-image/">How to Create an S2I Builder Image</a> blog post. Also, I used the <a href="https://github.com/openshift/sti-wildfly">openshift/wildfly-81-centos7</a> image as a source of inspiration.</p>
+</div>
+<div class="paragraph">
+<p>I created an S2I project, and modified the Dockerfile:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Installed all the binaries I needed. In this case I installed <strong>java 8</strong>, <strong>maven 3.3.3</strong> and <strong>gradle 2.6</strong> on top of the <strong>openshift/base-centos7</strong> base image</p>
+</li>
+<li>
+<p>Modified all the labels describing the S2I image</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You may want to take a few minutes and examine the <a href="https://github.com/jorgemoralespou/osev3-examples/blob/master/spring-boot/springboot-sti/Dockerfile">Dockerfile</a> in more detail.</p>
+</div>
+<div class="paragraph">
+<p>The next step in the process of getting a Spring Boot application running on OpenShift 3 is to build/generate the artifact (fat jar file) and place it into a “known” location where the image expects to find it. In order to accomplish this, we need to modify the assemble script that we are using as a base from the wildfly image.  This scripts needs to be modified to have the following capabilities:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Ability to build with maven and gradle. Maven takes precedence if there is a pom.xml against having a build.gradle file</p>
+</li>
+<li>
+<p>Make configurable the options to both builders via and ENV named BUILDER_ARGS with some appropriate defaults</p>
+</li>
+<li>
+<p>Place the generated artifact in a known location (/opt/openshift/app.jar)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You may want to take a few minutes and review the modified <a href="https://github.com/jorgemoralespou/osev3-examples/blob/master/spring-boot/springboot-sti/.sti/bin/assemble">assemble</a> script to ensure you understand all of the changes.</p>
+</div>
+<div class="paragraph">
+<p>And finally, I modified the S2I run script to run the Spring Boot application, with the following changes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Execution of the generated artifact in the known location</p>
+</li>
+<li>
+<p>Being able to pass application parameters via an ENV named APP_OPTIONS</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You may want to look in greater detail the S2I <a href="https://github.com/jorgemoralespou/osev3-examples/blob/master/spring-boot/springboot-sti/.sti/bin/run">run</a> script.</p>
+</div>
+<div class="paragraph">
+<p>Then, following instructions on <a href="https://blog.openshift.com/create-s2i-builder-image/">Maciej&#8217;s blog post</a>, I created a test application (really two, one for maven building and one for gradle), and tested everything via using the generated Makefile.</p>
+</div>
+<div class="paragraph">
+<p><strong>Great!!! Now it is time to add this S2I Builder to OpenShift 3.</strong></p>
+</div>
+<div class="paragraph">
+<p>At this step you can take two approaches (with some variations). Publish your builder on Docker Hub, or just make your builder available in OpenShift..</p>
+</div>
+<div class="paragraph">
+<p>Now, in order to do the latter, in a new project we need to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Create an ImageStream. An ImageStream is identified as having builder images if it has a <a href="https://github.com/jorgemoralespou/osev3-examples/blob/master/spring-boot/springboot-sti/springboot-sti-all.json#L83">builder tag</a> in it’s definition.</p>
+</li>
+<li>
+<p>Create a BuildConfig using my GitHub project as source and the builder ImageStream as output.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You may want to see the <a href="https://github.com/jorgemoralespou/osev3-examples/blob/master/spring-boot/springboot-sti/springboot-sti-all.json">OpenShift resources definition</a>.</p>
+</div>
+<div class="paragraph">
+<p>To have the Spring Boot builder working on your OpenShift 3 installation, follow these simple steps:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc new-project springboot-sti
+$ oc create -f https://raw.githubusercontent.com/jorgemoralespou/osev3-examples/master/spring-boot/springboot-sti/springboot-sti-all.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>I have also provided two sample instant-app templates for demonstrating usage of the builder. This is a helloworld Spring Boot sample application available in my GitHub that will be built using maven or gradle depending on the instant-app you select.</p>
+</div>
+<div class="paragraph">
+<p>You can monitor the building process for this springboot-sti image. Once the build is done, and the image is pushed into the internal docker registry in OpenShift, it is ready for use.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/springboot/springboot-sti-builder.png" alt="Building the builder">
+</div>
+</div>
+<div class="paragraph">
+<p>You can use one of the quickstart templates:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/springboot/springboot-templates.png" alt="Selecting a template">
+</div>
+</div>
+<div class="paragraph">
+<p>Provide it with required information (application name and hostname):</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/springboot/helloworld-gradle.png" alt="Gradle helloworld instantapp">
+</div>
+</div>
+<div class="paragraph">
+<p>And create the application.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/springboot/helloworld-deployed.png" alt="Helloworld in OS Console">
+</div>
+</div>
+<div class="paragraph">
+<p>Once your application is running, you can visit it’s URL to see it in action.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/springboot//helloworld-running.png" alt="Running helloworld app">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_a_more_interesting_spring_boot_application">A more interesting Spring Boot application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>So far, we have a running Spring Boot application. But the question is, will I be able to build and run more complex applications? Of course you can!</p>
+</div>
+<div class="paragraph">
+<p>I created a more complex sample Spring Boot application, consisting of a web application and a messages service that stores information in memory.To keep things simple, I used the samples provided with Spring Boot distribution as source and modified two of them to allow interaction across the two samples. So our web application will be a frontend for our messages service. The web service will interact with the messages service via a Rest API.</p>
+</div>
+<div class="paragraph">
+<p>I will use the same approach I did before, on <a href="https://blog.openshift.com/part-2-creating-a-template-a-technical-walkthrough/">Part 2</a> of my templates blog to show all the OpenShift resources that I will be creating. I will package everything as an <a href="https://github.com/jorgemoralespou/osev3-examples/blob/master/spring-boot/sample-microservices-springboot/ose-instantapp-template.json">instant-app template</a>, so it can be seen in action in an easy way.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/springboot/Template-SpringBoot-microservices.png" alt="Sample template">
+</div>
+</div>
+<div class="paragraph">
+<p>To run it you will just need to load the instant-app, and instantiate it. Of course, you will need to adjust the parameters when creating your template. The required parameters are APPLICATION_NAME for the name of the application, APPLICATION_HOSTNAME will be the external DNS name where the web will be listening and APPLICATION_HOSTNAME_DATA will be the external DNS name for the Rest Endpoint for the data service.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc create -f https://raw.githubusercontent.com/jorgemoralespou/osev3-examples/master/spring-boot/sample-microservices-springboot/ose-instantapp-template.json
+$ oc new-app --template=springboot-sample-microservices -p APPLICATION_NAME=springbootms,APPLICATION_HOSTNAME=web.example.com,APPLICATION_HOSTNAME_DATA=data.example.com</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This sample application will create a web component that will look like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/springboot/web.png" alt="Web application">
+</div>
+</div>
+<div class="paragraph">
+<p>And a data services, that can be queried using Rest, like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$  curl http://data.example.com/
+[{"id":1,"text":"Hello","summary":"World","created":1441125685591},{"id":2,"text":"Hi","summary":"Universe","created":1441125685594},{"id":3,"text":"Hola","summary":"OpenShift","created":1441125685594}]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl  -H "Content-type: application/json" -X POST -d '{"id":10,"text":"aaaaa","summary":"bbbbb"}'  http://data.example.com:1080
+{"id":10,"text":"aaaaa","summary":"bbbbb","created":1441126793364}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$  curl http://data.example.com/
+[{"id":1,"text":"Hello","summary":"World","created":1441125685591},{"id":2,"text":"Hi","summary":"Universe","created":1441125685594},{"id":3,"text":"Hola","summary":"OpenShift","created":1441125685594},{"id":10,"text":"aaaaa","summary":"bbbbb","created":1441126793364}]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Looking at the logs of both pods, you will be able to see the output of your running Spring Boot applications.</p>
+</div>
+<div class="paragraph">
+<p>Let’s first identify our pods. These will be the pods in Running state, with names starting with springbootms-data and springbootms-web:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc get pods
+NAME                        READY     STATUS       RESTARTS   AGE
+springboot-sti-1-build      0/1       ExitCode:0   0          48m
+springbootms-data-1-1093k   1/1       Running      0          24m
+springbootms-data-1-build   0/1       ExitCode:0   0          28m
+springbootms-web-1-37xi2    1/1       Running      0          24m
+springbootms-web-1-build    0/1       ExitCode:0   0          28m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is similar to what you will see if you tail the log for the data service:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc logs springbootms-data-1-1093k
+2015-09-01 16:41:28.019  INFO 1 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2015-09-01 16:41:28.031  INFO 1 --- [           main] o.s.c.support.DefaultLifecycleProcessor  : Starting beans in phase 0
+2015-09-01 16:41:28.239  INFO 1 --- [           main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8080 (http)
+2015-09-01 16:41:28.241  INFO 1 --- [           main] c.o.e.m.r.InMemoryRepositoryApplication  : Started InMemoryRepositoryApplication in 19.117 seconds (JVM running for 20.961)
+2015-09-01 16:55:36.809  INFO 1 --- [nio-8080-exec-4] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring FrameworkServlet 'dispatcherServlet'
+2015-09-01 16:55:36.809  INFO 1 --- [nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization started
+2015-09-01 16:55:36.836  INFO 1 --- [nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization completed in 27 ms</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And this is the content available in the tailed log for the web service:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc logs springbootms-web-1-37xi2
+2015-09-01 16:41:27.410  INFO 1 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2015-09-01 16:41:27.693  INFO 1 --- [           main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8080 (http)
+2015-09-01 16:41:27.703  INFO 1 --- [           main] c.o.e.m.web.SampleWebUIApplication       : Started SampleWebUIApplication in 17.639 seconds (JVM running for 20.512)
+2015-09-01 16:55:36.567  INFO 1 --- [nio-8080-exec-4] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring FrameworkServlet 'dispatcherServlet'
+2015-09-01 16:55:36.568  INFO 1 --- [nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization started
+2015-09-01 16:55:36.594  INFO 1 --- [nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization completed in 26 ms</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As we have seen, our sample Spring Boot services application are running fine using our Spring Boot S2I builder image.</p>
+</div>
+<div class="paragraph">
+<p>I hope you have enjoyed!!!</p>
+</div>
+</div>
+</div>
+    </div
+
+    <footer class="page__meta">
+      <p class="page__taxonomy">
+         <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+         <span itemprop="keywords">
+               <a href="/tags/#openshift" class="page__taxonomy-item" rel="tag">openshift</a><a href="/tags/#origin" class="page__taxonomy-item" rel="tag">origin</a><a href="/tags/#builds" class="page__taxonomy-item" rel="tag">builds</a><a href="/tags/#springboot" class="page__taxonomy-item" rel="tag">springboot</a><a href="/tags/#java" class="page__taxonomy-item" rel="tag">java</a><a href="/tags/#maven" class="page__taxonomy-item" rel="tag">maven</a><a href="/tags/#s2i" class="page__taxonomy-item" rel="tag">s2i</a><a href="/tags/#gradle" class="page__taxonomy-item" rel="tag">gradle</a>
+         </span>
+      </p>
+
+      <p class="page__taxonomy">
+         <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+         <span itemprop="keywords">
+            <a href="/categories/#devexp" class="page__taxonomy-item" rel="categories">devexp</a>
+         </span>
+      </p>
+
+      <p class="page__date">
+            <strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:  </strong>September 03, 2015</p>
+   </footer>
+
+   <!--
+   <section class="page__share">
+      <h4 class="page__share-title">Share on</h4>
+         <a href="https://twitter.com/intent/tweet?via=UnPOUcoDe&text=Configuring your application, Part 2 http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+         <a href="https://www.facebook.com/sharer/sharer.php?u=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+         <a href="https://plus.google.com/share?url=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+         <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+   </section>
+
+<nav class="pagination">
+<a href="http://jorgemoral.es/devexp/configuring-your-app-1/" class="pagination--pager" title="Configuring your application, Part 1
+">Previous</a>
+<a href="#" class="pagination--pager disabled">Next</a>
+</nav>
+</div>
+-->
+</article>
+
+    </div>
+
+    <div class="page__footer">
+        <footer>
+            <!-- start custom footer snippets -->
+            <!-- end custom footer snippets -->
+            <div class="page__footer-follow">
+                <ul class="social-icons">
+                    <li><strong>Follow:</strong></li>
+                    <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                    <li><a href="http://jorgemoral.es/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+                </ul>
+            </div>
+            <div class="page__footer-copyright">&copy; 2016 Jorge Morales Pou.</div>
+        </footer>
+    </div>
+    <script src="/js/main.min.js"></script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-81343831-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+
+</html>
+

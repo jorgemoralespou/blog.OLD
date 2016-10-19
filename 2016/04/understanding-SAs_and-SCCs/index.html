@@ -1,0 +1,402 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- begin SEO -->
+    <title>Learn the Origin</title>
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Learn the Origin">
+    <meta property="og:title" content="Learn the Origin">
+    <link rel="canonical" href="http://jorgemoral.es/">
+    <meta property="og:url" content="http://jorgemoral.es/">
+    <meta name="twitter:site" content="@UnPOUcoDe">
+    <meta name="twitter:title" content="Learn the Origin">
+    <meta name="twitter:description" content="Touching containers, orchestration and application development properly mixed with a little touch of real life experience">
+    <meta name="twitter:url" content="http://jorgemoral.es/">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Person",
+            "name": "Jorge Morales Pou",
+            "url": "http://jorgemoral.es",
+            "sameAs": ["https://twitter.com/UnPOUcoDe", "https://www.linkedin.com/in/jorgemoralespou", "https://github.com/jorgemoralespou"]
+        }
+    </script>
+    <!-- end SEO -->
+    <link href="http://jorgemoral.es/feed.xml" type="application/atom+xml" rel="alternate" title="Learn the Origin Feed">
+    <title>jorgemoral.es ::
+        Understanding Service Accounts and SCCs
+    </title>
+    <!--
+    <link rel="stylesheet" href="/css/stylesheet.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    -->
+    <meta name="generator" content="Nanoc 4.3.4">
+
+    <!-- For all browsers -->
+    <link rel="stylesheet" href="/css/main.css">
+    <meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+    <!-- insert favicons. use http://realfavicongenerator.net/ -->
+    <link rel="stylesheet" href="/css/asciidoc-pygments.css">
+</head>
+
+<body  class="layout--single">
+    <div class="masthead">
+        <div class="masthead__inner-wrap">
+            <div class="masthead__menu">
+                <nav id="site-nav" class="greedy-nav">
+                    <button><div class="navicon"></div></button>
+                    <ul class="visible-links">
+                        <li class="masthead__menu-item masthead__menu-item--lg"><a href="/">Learn the Origin</a></li>
+                        <li class="masthead__menu-item"><a href="/categories">Categories</a></li>
+                        <li class="masthead__menu-item"><a href="/tags">Tags</a></li>
+                        <li class="masthead__menu-item"><a href="/all-posts">All posts</a></li>
+                        <!--
+                        <li class="masthead__menu-item"><a href="/year-archive">By year</a></li>
+                        -->
+                        <li class="masthead__menu-item"><a href="/presentations">Presentations</a></li>
+                        <li class="masthead__menu-item"><a href="/conferences">Conferences</a></li>
+                        <li class="masthead__menu-item"><a href="/about">About me</a></li>
+                    </ul>
+                    <ul class="hidden-links hidden"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+<!--  USE Breadcrumbs Helper
+
+    <nav class="breadcrumbs">
+      <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.es/" itemprop="item"><span itemprop="name">Home</span></a>
+              <meta itemprop="position" content="1" />
+            </li>
+            <span class="sep">/</span>
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.esdevexp" itemprop="item"><span itemprop="name">Devexp</span></a>
+              <meta itemprop="position" content="2" />
+            </li>
+            <span class="sep">/</span>
+            <li class="current">Configuring your application, Part 2</li>
+      </ol>
+    </nav>
+-->
+
+    <div id="main" role="main">
+        <div class="sidebar sticky">
+            <div itemscope itemtype="http://schema.org/Person">
+                <div class="author__avatar">
+                    <img src="/images/bio-photo.jpg" class="author__avatar" alt="Jorge Morales">
+                </div>
+                <div class="author__content">
+                    <h3 class="author__name">Jorge Morales</h3>
+                    <p class="author__bio">OpenShift Developer Advocate working for Red Hat.<br/>Drop me a tweet if you want me to blog about a topic</p>
+                </div>
+
+                <div class="author__urls-wrapper">
+                    <button class="btn btn--inverse">Follow</button>
+                    <ul class="author__urls social-icons">
+                        <li><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Madrid, Spain</li>
+                        <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                        <li><a href="https://github.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitHub</a></li>
+                        <li><a href="https://gitlab.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitLab</a></li>
+                        <li><a href="https://www.linkedin.com/in/jorgemoralespou"><i class="fa fa-fw fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+<article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <div class="page__inner-wrap">
+        <header>
+            <h1 class="page__title" itemprop="headline">Understanding Service Accounts and SCCs</h1>
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                8 minutes
+                    Posted:
+                    15/Apr/2016 by
+                        Jorge Morales
+            </p>
+        </header>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>We launched OpenShift 3.0 back in June 2015 and I have had the pleasure of speaking with users all over Europe and the EMEA region to help them get up and running with deploying applications on the platform. One of the features that developers and administrator often ask questions about are Service Accounts and Security Context Constraints. In this blog post, I will provide a simple introduction into both concepts, how they work and their usage.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_security_context_constraints_scc">Security Context Constraints (SCC)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="https://docs.openshift.org/latest/architecture/additional_concepts/authorization.html#security-context-constraints">official documentation states</a>:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>OpenShift provides security context constraints (SCC) that control the actions that a pod can perform and what it has the ability to access.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>In short, when we execute a container, we want to guarantee that the capabilities required by that container to run are satisfied, while at the same time we also want OpenShift to be a secure Container Application platform. For this reason we can not allow any container to get access to unnecessary capabilities or to run in an insecure way (e.g. privileged or as root).</p>
+</div>
+<div class="paragraph">
+<p>OpenShift guarantees that the capabilities required by a container are granted to the user that executes the container at <a href="https://docs.openshift.org/latest/architecture/additional_concepts/authorization.html#admission">admission time</a>. Admission is done based on the identity of the user executing the pod and the pod’s service account (introduced later in this blog).</p>
+</div>
+<div class="paragraph">
+<p>The OpenShift Container Application Platform provides a set of predefined Security Context Constraints that can be used, modified or extended by any administrator. The SCCs that can be used are as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc get scc
+NAME              PRIV   CAPS  HOSTDIR  SELINUX    RUNASUSER         FSGROUP   SUPGROUP  PRIORITY
+anyuid            false  []    false    MustRunAs  RunAsAny          RunAsAny  RunAsAny  10
+hostaccess        false  []    true     MustRunAs  MustRunAsRange    RunAsAny  RunAsAny  &lt;none&gt;
+hostmount-anyuid  false  []    true     MustRunAs  RunAsAny          RunAsAny  RunAsAny  &lt;none&gt;
+nonroot           false  []    false    MustRunAs  MustRunAsNonRoot  RunAsAny  RunAsAny  &lt;none&gt;
+privileged        true   []    true     RunAsAny   RunAsAny          RunAsAny  RunAsAny  &lt;none&gt;
+restricted        false  []    false    MustRunAs  MustRunAsRange    RunAsAny  RunAsAny  &lt;none&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, the execution of any container will be granted the <strong>restricted</strong> SCC and only the capabilities defined by that SCC.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc describe scc restricted
+Name:                restricted
+Priority:               &lt;none&gt;
+Access:
+  Users:             &lt;none&gt;
+  Groups:               system:authenticated
+Settings:
+  Allow Privileged:        false
+  Default Add Capabilities:      &lt;none&gt;
+  Required Drop Capabilities:    KILL,MKNOD,SYS_CHROOT,SETUID,SETGID
+  Allowed Capabilities:       &lt;none&gt;
+  Allowed Volume Types:       configMap,downwardAPI,emptyDir,persistentVolumeClaim,secret
+  Allow Host Network:         false
+  Allow Host Ports:        false
+  Allow Host PID:          false
+  Allow Host IPC:          false
+  Read Only Root Filesystem:     false
+  Run As User Strategy:             MustRunAsRange
+    UID:             &lt;none&gt;
+    UID Range Min:            &lt;none&gt;
+    UID Range Max:            &lt;none&gt;
+  SELinux Context Strategy:         MustRunAs
+    User:               &lt;none&gt;
+    Role:               &lt;none&gt;
+    Type:               &lt;none&gt;
+    Level:              &lt;none&gt;
+  FSGroup Strategy:                 MustRunAs
+    Ranges:             &lt;none&gt;
+  Supplemental Groups Strategy:     RunAsAny
+    Ranges:             &lt;none&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As can be seen in the previous description of the <strong>restricted</strong> SCC, a list of users and groups can be specified. In order to grant a user or group a specific SCC, a cluster administrator can execute the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oadm policy add-user-to-scc &lt;scc_name&gt; &lt;user_name&gt;
+$ oadm policy add-group-to-scc &lt;scc_name&gt; &lt;group_name&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_service_accounts">Service Accounts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="https://docs.openshift.org/latest/dev_guide/service_accounts.html">official documentation states</a>:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>When a person uses the command line or web console, their API token authenticates them to the OpenShift API. However, when a regular user’s credentials are not available, it is common for components to make API calls independently. For example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Replication controllers make API calls to create or delete pods</p>
+</li>
+<li>
+<p>Applications inside containers could make API calls for discovery purposes</p>
+</li>
+<li>
+<p>External applications could make API calls for monitoring or integration purposes</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Service accounts provide a flexible way to control API access without sharing a regular user’s credentials</strong>.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>As you can see, there are many use cases for Service Accounts, and if we dive into the first use case aforementioned, we need to understand that OpenShift (and Kubernetes) are not synchronous in the execution of their commands.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/sa_scc/Eventual_consistency.png" alt="Asynch state consolidation">
+</div>
+</div>
+<div class="paragraph">
+<p>When a user wants to deploy an application, he creates a DeploymentConfig resource, which describes a desired state (as can be seen in the picture above - step 1). From this point, a set of controllers (admission, replication controller, scheduler,&#8230;&#8203;), running on the master server, will be monitoring those definitions and will execute necessary actions on the OpenShift platform in order to provide consistency between the desired and actual state (as can be seen in the picture above - step 2). This will happen as soon as the controllers try to consolidate the cluster state.</p>
+</div>
+<div class="paragraph">
+<p>What this really means is, the actions are executed by the OpenShift controllers and not by the actual user, that expressed the desired state. This leads to the situation where we need to identify who&#8217;s executing the actions the controllers are invoking.</p>
+</div>
+<div class="paragraph">
+<p>By default, OpenShift creates three service accounts per project for building, deploying and running an application (see <a href="https://docs.openshift.org/latest/dev_guide/service_accounts.html#default-service-accounts-and-roles">the official documentation</a> for more details).</p>
+</div>
+<div class="paragraph">
+<p>When a user creates anyobject in OpenShift it will use these default Service Accounts, but a different one can be specified within the object configuration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">{
+   "kind": "DeploymentConfig",
+   "apiVersion": "v1",
+   "metadata": {...},
+   "spec": {
+      ...
+      "template": {
+         ...
+         "spec":{
+            "containers": [
+            ],
+            ...
+            "serviceAccountName": "myserviceaccount"
+         }
+      }
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>One reason to use a dedicated service account in a deployment configuration is to allow an application running within a pod to use a set of privileges or capabilities other than those granted by the <strong>default</strong> service account. This default service account will only have access to all the capabilities defined by the <strong>restricted</strong> SCC, as out of the box OpenShift will add every authenticated user to the restricted SCC (as can bee seen in the output of the execution of “oc describe scc restricted” shown above). This includes the default service account which is not explicitly included in any other SCC.</p>
+</div>
+<div class="paragraph">
+<p>Since every service account has an associated username, it can be added to any specific SCC in a similar way as we have done previously with users and groups.</p>
+</div>
+<div class="paragraph">
+<p>As an example, we might want to run an application that needs access to mount hostPath volumes, or we might want to run an application with a specified user and not a random user OpenShift will use as default (as detailed in <a href="https://blog.openshift.com/getting-any-docker-image-running-in-your-own-openshift-cluster/">this blog</a>), or we might want to restrict the container&#8217;s filesystem to be readonly, and forcing every write to be on external storage. There are many other situations that might require us to change the capabilities provided by default.</p>
+</div>
+<div class="paragraph">
+<p>This leads to the conclusion of this blog with my advice:</p>
+</div>
+<div class="paragraph">
+<p>“Every time you have an application/process that requires a capability not granted by the restricted SCC, create a new, specific service account and add it to the appropriate SCC. But, if there is no SCC that perfectly suits your needs, instead of using the best fit one, <a href="https://docs.openshift.org/latest/admin_guide/manage_scc.html#creating-new-security-context-constraints">create a new SCC</a> tailored for your requirements, and finally set it for the deployment configuration (as described above).”</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc create serviceaccount useroot
+
+$ oc patch dc/myAppNeedsRoot --patch '{"spec":{"template":{"spec":{"serviceAccountName": "useroot"}}}}'
+
+$ oc adm policy add-scc-to-user anyuid -z useroot</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Above you can see my advice in action, creating a new service account named <em>useroot</em>, modifying the deployment configuration for <em>myAppNeedsRoot</em> and then adding the serviceaccount to the <em>anyuid</em> SCC as the application defined needs to run as user root in the container. Note that I haven&#8217;t created a specific SCC since anyuid meets my needs.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The previous example is using notation available in OpenShift Origin 1.1.4+ and OpenShift Enterprise 3.2+.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>I’ve seen many users granting access to a user/serviceaccount to the privileged SCC to avoid going through this exercise, and this is can be a big security problem, so take my word of caution.
+&lt;/group_name&gt;&lt;/scc_name&gt;&lt;/user_name&gt;&lt;/scc_name&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;</p>
+</div>
+</div>
+</div>
+    </div
+
+    <footer class="page__meta">
+      <p class="page__taxonomy">
+         <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+         <span itemprop="keywords">
+               <a href="/tags/#openshift" class="page__taxonomy-item" rel="tag">openshift</a><a href="/tags/#origin" class="page__taxonomy-item" rel="tag">origin</a><a href="/tags/#scc" class="page__taxonomy-item" rel="tag">scc</a>
+         </span>
+      </p>
+
+      <p class="page__taxonomy">
+         <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+         <span itemprop="keywords">
+            <a href="/categories/#devexp" class="page__taxonomy-item" rel="categories">devexp</a>
+         </span>
+      </p>
+
+      <p class="page__date">
+            <strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:  </strong>April 15, 2016</p>
+   </footer>
+
+   <!--
+   <section class="page__share">
+      <h4 class="page__share-title">Share on</h4>
+         <a href="https://twitter.com/intent/tweet?via=UnPOUcoDe&text=Configuring your application, Part 2 http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+         <a href="https://www.facebook.com/sharer/sharer.php?u=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+         <a href="https://plus.google.com/share?url=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+         <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+   </section>
+
+<nav class="pagination">
+<a href="http://jorgemoral.es/devexp/configuring-your-app-1/" class="pagination--pager" title="Configuring your application, Part 1
+">Previous</a>
+<a href="#" class="pagination--pager disabled">Next</a>
+</nav>
+</div>
+-->
+</article>
+
+    </div>
+
+    <div class="page__footer">
+        <footer>
+            <!-- start custom footer snippets -->
+            <!-- end custom footer snippets -->
+            <div class="page__footer-follow">
+                <ul class="social-icons">
+                    <li><strong>Follow:</strong></li>
+                    <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                    <li><a href="http://jorgemoral.es/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+                </ul>
+            </div>
+            <div class="page__footer-copyright">&copy; 2016 Jorge Morales Pou.</div>
+        </footer>
+    </div>
+    <script src="/js/main.min.js"></script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-81343831-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+
+</html>
+

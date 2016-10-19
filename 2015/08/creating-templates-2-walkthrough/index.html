@@ -1,0 +1,1732 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- begin SEO -->
+    <title>Learn the Origin</title>
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Learn the Origin">
+    <meta property="og:title" content="Learn the Origin">
+    <link rel="canonical" href="http://jorgemoral.es/">
+    <meta property="og:url" content="http://jorgemoral.es/">
+    <meta name="twitter:site" content="@UnPOUcoDe">
+    <meta name="twitter:title" content="Learn the Origin">
+    <meta name="twitter:description" content="Touching containers, orchestration and application development properly mixed with a little touch of real life experience">
+    <meta name="twitter:url" content="http://jorgemoral.es/">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Person",
+            "name": "Jorge Morales Pou",
+            "url": "http://jorgemoral.es",
+            "sameAs": ["https://twitter.com/UnPOUcoDe", "https://www.linkedin.com/in/jorgemoralespou", "https://github.com/jorgemoralespou"]
+        }
+    </script>
+    <!-- end SEO -->
+    <link href="http://jorgemoral.es/feed.xml" type="application/atom+xml" rel="alternate" title="Learn the Origin Feed">
+    <title>jorgemoral.es ::
+        Part 2 - Create a template. A technical walkthrough
+    </title>
+    <!--
+    <link rel="stylesheet" href="/css/stylesheet.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    -->
+    <meta name="generator" content="Nanoc 4.3.4">
+
+    <!-- For all browsers -->
+    <link rel="stylesheet" href="/css/main.css">
+    <meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+    <!-- insert favicons. use http://realfavicongenerator.net/ -->
+    <link rel="stylesheet" href="/css/asciidoc-pygments.css">
+</head>
+
+<body  class="layout--single">
+    <div class="masthead">
+        <div class="masthead__inner-wrap">
+            <div class="masthead__menu">
+                <nav id="site-nav" class="greedy-nav">
+                    <button><div class="navicon"></div></button>
+                    <ul class="visible-links">
+                        <li class="masthead__menu-item masthead__menu-item--lg"><a href="/">Learn the Origin</a></li>
+                        <li class="masthead__menu-item"><a href="/categories">Categories</a></li>
+                        <li class="masthead__menu-item"><a href="/tags">Tags</a></li>
+                        <li class="masthead__menu-item"><a href="/all-posts">All posts</a></li>
+                        <!--
+                        <li class="masthead__menu-item"><a href="/year-archive">By year</a></li>
+                        -->
+                        <li class="masthead__menu-item"><a href="/presentations">Presentations</a></li>
+                        <li class="masthead__menu-item"><a href="/conferences">Conferences</a></li>
+                        <li class="masthead__menu-item"><a href="/about">About me</a></li>
+                    </ul>
+                    <ul class="hidden-links hidden"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+<!--  USE Breadcrumbs Helper
+
+    <nav class="breadcrumbs">
+      <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.es/" itemprop="item"><span itemprop="name">Home</span></a>
+              <meta itemprop="position" content="1" />
+            </li>
+            <span class="sep">/</span>
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.esdevexp" itemprop="item"><span itemprop="name">Devexp</span></a>
+              <meta itemprop="position" content="2" />
+            </li>
+            <span class="sep">/</span>
+            <li class="current">Configuring your application, Part 2</li>
+      </ol>
+    </nav>
+-->
+
+    <div id="main" role="main">
+        <div class="sidebar sticky">
+            <div itemscope itemtype="http://schema.org/Person">
+                <div class="author__avatar">
+                    <img src="/images/bio-photo.jpg" class="author__avatar" alt="Jorge Morales">
+                </div>
+                <div class="author__content">
+                    <h3 class="author__name">Jorge Morales</h3>
+                    <p class="author__bio">OpenShift Developer Advocate working for Red Hat.<br/>Drop me a tweet if you want me to blog about a topic</p>
+                </div>
+
+                <div class="author__urls-wrapper">
+                    <button class="btn btn--inverse">Follow</button>
+                    <ul class="author__urls social-icons">
+                        <li><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Madrid, Spain</li>
+                        <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                        <li><a href="https://github.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitHub</a></li>
+                        <li><a href="https://gitlab.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitLab</a></li>
+                        <li><a href="https://www.linkedin.com/in/jorgemoralespou"><i class="fa fa-fw fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+<article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <div class="page__inner-wrap">
+        <header>
+            <h1 class="page__title" itemprop="headline">Part 2 - Create a template. A technical walkthrough</h1>
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                35 minutes
+                    Posted:
+                    14/Aug/2015 by
+                        Jorge Morales
+            </p>
+        </header>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is Part 2 of a 2 part series of blogs that will help you bringing your applications into OpenShift.</p>
+</div>
+<div class="paragraph">
+<p>Now that we already know what is a template, and why we should use templates, let&#8217;s walk through the process of creating a template for our application.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_our_application">Our application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For this example, we are going to bring into OpenShift an application that will display a map and perform geospatial queries to populate the map with all Major League Baseball stadiums in the United States.
+Source for this application can be found in <a href="https://github.com/jorgemoralespou/openshift3mlbparks">my openshift3mlbparks GitHub repository</a>.</p>
+</div>
+<div class="paragraph">
+<p>The deployment architecture will consist of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>JBoss Enterprise Application Server with a JavaEE application as frontend tier</p>
+</li>
+<li>
+<p>MongoDB server with data corresponding to the location of the MLB Stadiums in the US as backend/data tier</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As the frontend tier is stateless, we will be able to deploy many JBoss EAP instances.</p>
+</div>
+<div class="paragraph">
+<p>We want to access our application in a single DNS name (e.g. mlbsparks.cloudapps.example.com).</p>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="/posts/images/templates/OSE_Templates_blog_1.png" alt="OSE Templates blog 1">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_design_our_template">Design our template</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The first thing we will need to do is design the contents of our template. The best approach I&#8217;ve found so far is to think of a template as a set of layers of resources with the following structure (from bottom up):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>OpenShift Images</strong>: Base images we will be using for our containers.</p>
+</li>
+<li>
+<p><strong>Builds</strong>: Generate an image from source code (application source or Dockerfile source).</p>
+</li>
+<li>
+<p><strong>Images</strong>: Images produced by the builds.</p>
+</li>
+<li>
+<p><strong>Deployments</strong>: What images will be deployed and how.</p>
+</li>
+<li>
+<p><strong>Abstractions</strong>: Additional resources needed for our application, like networking, storage, security,&#8230;&#8203;</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_layer_0_openshift_images">Layer 0: OpenShift images</h3>
+<div class="paragraph">
+<p>In this first layer, we will need to define all the "base" images we will be using for our containers. These images typically will not be part of the template, but they need to be identified. These can be S2I images or plain Docker images.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ImageStream</dt>
+<dd>
+<p>An image stream presents a single virtual view of related images, as it may contain images from:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Its own image repository in OpenShift’s integrated Docker Registry</p>
+</li>
+<li>
+<p>Other image streams</p>
+</li>
+<li>
+<p>Docker image repositories from external registries.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1"></dt>
+<dd>
+<p>OpenShift stores complete metadata about each image (e.g., command, entrypoint, environment variables, etc.). Images in OpenShift are immutable.</p>
+</dd>
+<dt class="hdlist1">ImageStreamImage</dt>
+<dd>
+<p>An ImageStreamImage is used to reference or retrieve an image for a given image stream and image name. It uses the following convention for its name: &lt;image stream name&gt;@&lt;name&gt;</p>
+</dd>
+<dt class="hdlist1">ImageStreamTag</dt>
+<dd>
+<p>An ImageStreamTag is used to reference or retrieve an image for a given image stream and tag. It uses the following convention for its name: &lt;image stream name&gt;:&lt;tag&gt;</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>In our sample application, we will be using 2 base images:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>for the frontend component of our application, where we will be using a S2I enabled JBoss EAP image. We will be using a specific tag, 6.4 of this image. As this image will be used for building purposes, the specific usage will be defined in the Build layer.</p>
+</li>
+<li>
+<p>for the backend component of our application we will be using a MongoDB database. We will be using the latest available image. As this image is a ready to use image, the specific usage of this image will be defined in the Deployment layer.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Both ImageStreams are provided by OpenShift 3 out of the box, hence they are installed in the openshift project (namespace).
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For more information see <a href="https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/builds_and_image_streams.html#image-streams">the official documentation</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_layer_1_builds">Layer 1: Builds</h3>
+<div class="paragraph">
+<p>This layer defines all the builds we will require for our application. A build is the process of transforming input parameters into a resulting object. Most often, the process is used to transform source code into a runnable image.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">BuildConfig</dt>
+<dd>
+<p>A <a href="https://docs.openshift.com/enterprise/3.0/dev_guide/builds.html#defining-a-buildconfig"><strong>BuildConfig</strong></a> object is the definition of the entire build process.</p>
+</dd>
+<dt class="hdlist1"></dt>
+<dd>
+<p>A build configuration consists of the following key parts:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A source description (<strong>Where is your source code?</strong>)</p>
+</li>
+<li>
+<p>A strategy for building (<strong>How to build your image?</strong>)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Source-To-Image</em>: Transform your application into a runnable docker image, using a S2I image for building and running your application.</p>
+</li>
+<li>
+<p><em>Docker</em>: Your Dockerfile will be built into an image. This image will contain both, the runtime and the application already built.</p>
+</li>
+<li>
+<p><em>Custom</em>: You provide the building method in a Docker image.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>An output description (<strong>Where to place the built image</strong>?)</p>
+</li>
+<li>
+<p>A list of triggers (<strong>When and Why will the source be built?</strong>)</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>In our sample application we will be building the frontend component, layering our application on top of an EAP runtime.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "kind": "BuildConfig",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "mlbparks",             # &amp;lt;1&amp;gt;
+      "labels": {
+         "application": "mlbparks"    # &amp;lt;2&amp;gt;
+      }
+   },
+   "spec": {
+      "source": {                     # &amp;lt;3&amp;gt;
+         "type": "Git",               # &amp;lt;4&amp;gt;
+         "git": {
+            "uri": "https://github.com/jorgemoralespou/openshift3mlbparks.git",  # &amp;lt;5&amp;gt;
+            "ref": "master"           # &amp;lt;6&amp;gt;
+         },
+         "contextDir":""              # &amp;lt;7&amp;gt;
+      },
+      "strategy": {                   # &amp;lt;8&amp;gt;
+         "type": "Source",            # &amp;lt;9&amp;gt;
+         "sourceStrategy": {
+            "from": {                 # &amp;lt;10&amp;gt;
+               "kind": "ImageStreamTag",
+               "namespace": "openshift",
+               "name": "jboss-eap6-openshift:6.4"
+            }
+         }
+      },
+      "output": {                     # &amp;lt;11&amp;gt;
+         "to": {
+            "kind": "ImageStreamTag",
+            "name": "mlbparks:latest"
+         }
+      },
+      "triggers": [
+         {
+            "type": "GitHub",         # &amp;lt;12&amp;gt;
+            "generic": {
+               "secret": "secret"
+            }
+         },
+         {
+            "type": "Generic",        # &amp;lt;13&amp;gt;
+            "github": {
+               "secret": "secret"
+            }
+         },
+         {
+            "type": "ImageChange",    # &amp;lt;14&amp;gt;
+            "imageChange": {}
+         }
+      ]
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;1&gt; This is the name that will identify this BuildConfig.
+&lt;2&gt; These are the labels that will be set for this BuildConfig.
+&lt;3&gt; This section defines where is the source for the build.
+&lt;4&gt; It defines it is source located in a Git repository.
+&lt;5&gt; In this URI.
+&lt;6&gt; And using this tag/branch. This value is optional and defaults to “master” if not provided.
+&lt;7&gt; And this subdirectory from the repository. This value is optional and defaults to the root directory of the repository.
+&lt;8&gt; This defines which build strategy to use.
+&lt;9&gt; Source=S2I.
+&lt;10&gt; And this defines which S2I builder image to use.
+&lt;11&gt; Defines where to leave the generated image if the build succeeds. It is placing it in our current project.
+&lt;12&gt; This define that a change generated via a GitHub webhook trigger (if the source code is changed) will trigger a build.
+&lt;13&gt; This define that a change generated via a Generic webhook trigger will trigger a build.
+&lt;14&gt; This define that an Image Change will trigger a build. This will trigger a build if the builder image changes or is updated.</p>
+</div>
+<div class="paragraph">
+<p>For more information see <a href="https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/builds_and_image_streams.html#builds">the official documentation</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_layer_2_images">Layer 2: Images</h3>
+<div class="paragraph">
+<p>This layer defines all the images produced by the builds.</p>
+</div>
+<div class="paragraph">
+<p>In our sample application we will be producing an image defined in a new ImageStream.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "kind": "ImageStream",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "mlbparks",            # &amp;lt;1&amp;gt;
+      "labels": {
+         "application": "mlbparks"   # &amp;lt;2&amp;gt;
+      }
+   },
+   "spec": {                         # &amp;lt;3&amp;gt;
+      "dockerImageRepository": "",   # &amp;lt;4&amp;gt;
+      "tags": [                      # &amp;lt;5&amp;gt;
+         {
+            "name": "latest"
+         }
+      ]
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;1&gt; Name of the ImageStream. This ImageStream will be created in the current project.
+&lt;2&gt; Label to describe the resource relative to the application we are creating.
+&lt;3&gt; ImageStream Specifications
+&lt;4&gt; Docker Repository backing this image stream.
+&lt;5&gt; List of available tags or image stream locators for this image stream.</p>
+</div>
+<div class="paragraph">
+<p>As a result of the build process, for every build OpenShift will create a new version of the image, that we will always be tagged as latest (as seen in the BuildConfig&#8217;s output spec).</p>
+</div>
+<div class="paragraph">
+<p>For more information see <a href="https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/builds_and_image_streams.html#image-streams">the official documentation</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_layer_3_deployments">Layer 3: Deployments</h3>
+<div class="paragraph">
+<p>This layer defines the core of our applications. It defines what will be running in OpenShift.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">DeploymentConfig</dt>
+<dd>
+<p>A <a href="https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/deployments.html#deployments-and-deployment-configurations"><strong>DeploymentConfig</strong></a> is a definition of what will be deployed and running on OpenShift 3.</p>
+</dd>
+<dt class="hdlist1"></dt>
+<dd>
+<p>A deployment configuration consists of the following key parts:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A replication controller template which describes the application to be deployed. (<strong>What will be deployed?</strong>)</p>
+</li>
+<li>
+<p>The default replica count for the deployment. (<strong>How many instances will be deployed and running?</strong>)</p>
+</li>
+<li>
+<p>A deployment strategy which will be used to execute the deployment. (<strong>How it will be deployed?</strong>)</p>
+</li>
+<li>
+<p>A set of triggers which cause deployments to be created automatically. (<strong>When and Why will it be deployed?</strong>)</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>In our sample application we will have 2 DeploymentConfigs, one for the frontend component (JavaEE application) and another for the backend component (MongoDB).</p>
+</div>
+<div class="paragraph">
+<p>The DeploymentConfig for our frontend component will define that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>will have a pod with a single container, using the previously built mlbparks image.</p>
+</li>
+<li>
+<p>there will be initially 1 replica</p>
+</li>
+<li>
+<p>there will be a new deployment every time there is a new image built or there is a change in the configuration</p>
+</li>
+<li>
+<p>the redeployment strategy will be "Recreate", which means discard all running pods and create new ones.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "kind": "DeploymentConfig",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "mlbparks",                 # &amp;lt;1&amp;gt;
+      "labels": {                         # &amp;lt;2&amp;gt;
+         "deploymentConfig": "mlbparks",
+         "application": "mlbparks"
+      }
+   },
+   "spec": {                              # &amp;lt;3&amp;gt;
+      "replicas": 1,                      # &amp;lt;4&amp;gt;
+      "selector": {
+         "deploymentConfig": "mlbparks"   # &amp;lt;5&amp;gt;
+      },
+      "strategy": {
+         "type": "Recreate"               # &amp;lt;6&amp;gt;
+      },
+      "template": {                       # &amp;lt;7&amp;gt;
+         "metadata": {
+            "labels": {                   # &amp;lt;8&amp;gt;
+               "deploymentConfig": "mlbparks",
+               "application": "mlbparks"
+            },
+            "name": "mlbparks"            # &amp;lt;9&amp;gt;
+         },
+         "spec": {                        # &amp;lt;10&amp;gt;
+            "containers": [
+               {
+                  "name": "mlbparks",          # &amp;lt;11&amp;gt;
+                  "image": "mlbparks",         # &amp;lt;12&amp;gt;
+                  "imagePullPolicy": "Always", # &amp;lt;13&amp;gt;
+                  "env": [                     # &amp;lt;14&amp;gt;
+                     {
+                        "name": "OPENSHIFT_DNS_PING_SERVICE_NAME",
+                        "value": "mlbparks-ping"
+                     },
+                     {
+                        "name": "OPENSHIFT_DNS_PING_SERVICE_PORT",
+                        "value": "8888"
+                     },
+                     {
+                        "name": "MONGODB_USER",
+                        "value": "user"
+                     },
+                     {
+                        "name": "MONGODB_PASSWORD",
+                        "value": "password"
+                     },
+                     {
+                        "name": "MONGODB_DATABASE",
+                        "value": "database"
+                     }
+                  ],
+                  "ports": [                   # &amp;lt;15&amp;gt;
+                     {
+                        "name": "mlbparks-http",
+                        "containerPort": 8080,
+                        "protocol": "TCP"
+                     },
+                     {
+                        "name": "mlbparks-ping",
+                        "containerPort": 8888,
+                        "protocol": "TCP"
+                     }
+                  ],
+                  "readinessProbe": {         # &amp;lt;16&amp;gt;
+                     "exec": {
+                        "command": [
+                           "/bin/bash",
+                           "-c",
+                           "/opt/eap/bin/readinessProbe.sh"
+                        ]
+                     }
+                  },
+                  "resources": {},
+                  "terminationMessagePath": "/dev/termination-log",
+                  "securityContext": {        # &amp;lt;17&amp;gt;
+                     "capabilities": {},
+                     "privileged": false
+                  }
+               }
+            ],
+            "restartPolicy": "Always",
+            "dnsPolicy": "ClusterFirst"
+         }
+      },
+      "triggers": [                           # &amp;lt;18&amp;gt;
+         {
+            "type": "ImageChange",            # &amp;lt;19&amp;gt;
+            "imageChangeParams": {
+               "automatic": true,
+               "containerNames": [
+                  "mlbparks"
+               ],
+               "from": {
+                  "kind": "ImageStreamTag",
+                  "name": "mlbparks:latest"
+               }
+            }
+         },
+         {                                    # &amp;lt;20&amp;gt;
+            "type": "ConfigChange"
+         }
+      ]
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;1&gt; This is the name that will identify this DeploymentConfig
+&lt;2&gt; These are the labels that will describe this DeploymentConfig.
+&lt;3&gt; Specification for the DeploymentConfig. Everything inside this section describes the DeploymentConfig configuration.
+&lt;4&gt; Number of instances that should be created for this component/deployment
+&lt;5&gt; This should be the same as <strong>name</strong> (1).
+&lt;6&gt; Strategy to use when deploying a new version of the application in case it is triggered. As defined in <strong>triggers</strong>
+&lt;7&gt; The template defines what will be deployed as part of this deployment (the pod)
+&lt;8&gt; The labels to apply for the resources contained in the template (pod)
+&lt;9&gt; Name of the pod. Every pod instance created will have this name as prefix.
+&lt;10&gt; Defines the configuration (contents) of the pod
+&lt;11&gt; The name of the container.
+&lt;12&gt; The name of the image to use. <a href="#note12">See note</a>.
+&lt;13&gt; What should do when deploying. As we will be building the image, we need to always pull on new deployments. Note that if the image tag is latest, it will always pull the image by default, otherwise it will default to “IfNotPresent”.
+&lt;14&gt; A set of environment variables to pass to this container
+&lt;15&gt; The ports that the container exposes
+&lt;16&gt; Probe that will determine if the runtime in the container has started successfully, and traffic can be routed to it.
+&lt;17&gt; SecurityContextContraint to use for the container
+&lt;18&gt; The triggers that will dictate on what conditions to create a new deployment. (Deploy a new version of the pod)
+&lt;19&gt; Create a new deployment when the latest image tag is updated
+&lt;20&gt; Create a new deployment when there is a configuration change for this Resource.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+It is always recommended to set in every resource defined by a template a label of type <strong>"application": "NAME_OF_MY_APP"</strong> as then you can link resources created as part of the processing of the template. This can be done resource by resource, as described here, or at once, as described later in <a href="#labels">Labeling all resources in a template</a>.
+</td>
+</tr>
+</table>
+</div>
+<div id="note12" class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+If there is an ImageChangeTrigger defined for a DeploymentConfig, the image spec&#8217;s value gets substituted with the appropriate value for the image triggering the change. If you don&#8217;t have an ImageChangeTrigger, then this value should be a valid docker pull spec (ie "openshift/mongodb-24-centos7").
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The DeploymentConfig for our backend component will define that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>will have a pod with a single container using the MongoDB openshift base image.</p>
+</li>
+<li>
+<p>there will be initially 1 replica</p>
+</li>
+<li>
+<p>there will be a new deployment every time there is a new image built or there is a change in the configuration</p>
+</li>
+<li>
+<p>the redeployment strategy will be "Recreate", which means discard all running pods and create new ones.</p>
+</li>
+<li>
+<p>have a persistent volume on the host&#8217;s filesystem (not valid for HA or host failover).</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "kind": "DeploymentConfig",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "mlbparks-MongoDB",                 # &amp;lt;1&amp;gt;
+      "labels": {                                 # &amp;lt;2&amp;gt;
+         "application": "mlbparks"
+      }
+   },
+   "spec": {                                      # &amp;lt;3&amp;gt;
+      "replicas": 1,                              # &amp;lt;4&amp;gt;
+      "selector": {
+         "deploymentConfig": "mlbparks-MongoDB"   # &amp;lt;5&amp;gt;
+      },
+      "strategy": {
+         "type": "Recreate"                       # &amp;lt;6&amp;gt;
+      },
+      "template": {                               # &amp;lt;7&amp;gt;
+         "metadata": {
+            "labels": {                           # &amp;lt;8&amp;gt;
+               "deploymentConfig": "mlbparks-MongoDB",
+               "application": "mlbparks"
+            },
+            "name": "mlbparks-MongoDB"            # &amp;lt;9&amp;gt;
+         },
+         "spec": {                                # &amp;lt;10&amp;gt;
+            "containers": [
+               {
+                  "name": "mlbparks-MongoDB",         # &amp;lt;11&amp;gt;
+                  "image": "MongoDB",                 # &amp;lt;12&amp;gt;
+                  "imagePullPolicy": "IfNotPresent",  # &amp;lt;13&amp;gt;
+                  "env": [                            # &amp;lt;14&amp;gt;
+                     {
+                        "name": "MONGODB_USER",
+                        "value": "user"
+                     },
+                     {
+                        "name": "MONGODB_PASSWORD",
+                        "value": "password"
+                     },
+                     {
+                        "name": "MONGODB_DATABASE",
+                        "value": "database"
+                     }
+                  ],
+                  "ports": [                          # &amp;lt;15&amp;gt;
+                     {
+                        "containerPort": 27017,
+                        "protocol": "TCP"
+                     }
+                  ],
+                  "resources": {},
+                  "volumeMounts": [                   # &amp;lt;16&amp;gt;
+                     {
+                        "name": "mlbparks-MongoDB-data",
+                        "mountPath": "/var/lib/MongoDB/data"
+                     }
+                  ],
+                  "terminationMessagePath": "/dev/termination-log",
+                  "securityContext": {                # &amp;lt;17&amp;gt;
+                     "capabilities": {},
+                     "privileged": false
+                  }
+               }
+            ],
+            "volumes": [                              # &amp;lt;18&amp;gt;
+               {
+                  "name": "mlbparks-MongoDB-data",
+                  "emptyDir": {}
+               }
+            ],
+            "restartPolicy": "Always",
+            "dnsPolicy": "ClusterFirst"
+         }
+      },
+      "triggers": [                                   # &amp;lt;19&amp;gt;
+         {
+            "type": "ImageChange",                    # &amp;lt;20&amp;gt;
+            "imageChangeParams": {
+               "automatic": true,
+               "containerNames": [
+                  "mlbparks-MongoDB"
+               ],
+               "from": {
+                  "kind": "ImageStreamTag",
+                  "namespace": "openshift",
+                  "name": "MongoDB:latest"
+               }
+            }
+         },
+         {                                             # &amp;lt;21&amp;gt;
+            "type": "ConfigChange"
+         }
+      ]
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;1&gt; This is the name that will identify this DeploymentConfig
+&lt;2&gt; These are the labels that will describe this DeploymentConfig.
+&lt;3&gt; Specification for the DeploymentConfig. Everything inside this section describes the DeploymentConfig configuration.
+&lt;4&gt; Number of instances that should be created for this component/deployment
+&lt;5&gt; This should be the same as <strong>name</strong> (1).
+&lt;6&gt; Strategy to use when deploying a new version of the application in case it is triggered. As defined in <strong>triggers</strong>
+&lt;7&gt; The template defines what will be deployed as part of this deployment (the pod)
+&lt;8&gt; The labels to apply for the resources contained in the template (pod)
+&lt;9&gt; Name of the pod. Every pod instance created will have this name as prefix.
+&lt;10&gt; Defines the configuration (contents) of the pod
+&lt;11&gt; The name of the container.
+&lt;12&gt; The name of the image to use. <a href="#note12">See note</a>.
+&lt;13&gt; What should do when deploying.  We will only pull the image if it is not present, unless there is an ImageChange triggered in which case it will pull down the image, as we are using the :latest tag.
+&lt;14&gt; A set of environment variables to pass to this container
+&lt;15&gt; The ports that the container exposes
+&lt;16&gt; Volume mounts used in the container
+&lt;17&gt; SecurityContextContraint to use for the container
+&lt;18&gt; Volumes required for the pod. <a href="https://docs.openshift.com/enterprise/3.0/dev_guide/volumes.html">EmptyDir</a> is a temporary directory on a single machine.
+&lt;19&gt; The triggers that will dictate on what conditions to create a new deployment. (Deploy a new version of the pod)
+&lt;20&gt; Create a new deployment when the latest image tag is updated
+&lt;21&gt; Create a new deployment when there is a configuration change for this Resource.</p>
+</div>
+<div class="paragraph">
+<p>For more information see <a href="https://docs.openshift.com/enterprise/3.0/architecture/">the official documentation</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_layer_4_abstractions">Layer 4: Abstractions</h3>
+<div class="paragraph">
+<p>This layer defines all of the additional resources needed for our application to run, like networking, storage, security,&#8230;&#8203;</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Service</dt>
+<dd>
+<p>A <a href="https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/pods_and_services.html#services">service</a> serves as an internal load balancer. It identifies a set of replicated pods in order to proxy the connections it receives to them. Backing pods can be added to or removed from a service arbitrarily while the service remains consistently available, enabling anything that depends on the service to refer to it at a consistent internal address.</p>
+</dd>
+<dt class="hdlist1"></dt>
+<dd>
+<p>Services are assigned an IP address and port pair that, when accessed, proxy to an appropriate backing pod. A service uses a label selector to find all the containers running that provide a certain network service on a certain port.</p>
+</dd>
+<dt class="hdlist1">Route</dt>
+<dd>
+<p>An OpenShift <a href="https://docs.openshift.com/enterprise/3.0/dev_guide/routes.html">route</a> exposes a service at a host name, like www.example.com, so that external clients can reach it by name.</p>
+</dd>
+<dt class="hdlist1">PersistentVolumeClaim</dt>
+<dd>
+<p>You can make a request for storage resources using a <a href="https://docs.openshift.com/enterprise/3.0/dev_guide/persistent_volumes.html">PersistentVolumeClaim</a> object; the claim is paired with a volume that generally matches your request.</p>
+</dd>
+<dt class="hdlist1">ServiceAccount</dt>
+<dd>
+<p><a href="https://docs.openshift.com/enterprise/3.0/dev_guide/service_accounts.html">Service accounts</a> provide a flexible way to control API access without sharing a regular user’s credentials.</p>
+</dd>
+<dt class="hdlist1">Secret</dt>
+<dd>
+<p>A <a href="https://docs.openshift.com/enterprise/3.0/dev_guide/secrets.html">secret</a> provides a mechanism to hold sensitive information such as passwords, OpenShift client config files, dockercfg files, etc. Secrets decouple sensitive content from the pods that use it and can be mounted into containers using a volume plug-in or used by the system to perform actions on behalf of a pod.</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+These are not all of the possible abstractions. Read the <a href="https://docs.openshift.com/enterprise/3.0/welcome/index.html">official documentation</a> for more.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In our example, we will need a set of services abstracting the deployments:</p>
+</div>
+<div class="paragraph">
+<p>A service for the backend component (MongoDB). This service will be configured to target all pods running created with a label of <strong>deploymentConfig=mlbparks-MongoDB</strong> which happens
+for every pod created by the DeploymentConfig specified (as we can see in the DeploymentConfig for the backend component).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "kind": "Service",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "MongoDB",             # &amp;lt;1&amp;gt;
+      "labels": {
+         "application": "mlbparks"   # &amp;lt;2&amp;gt;
+      }
+   },
+   "spec": {
+      "ports": [
+         {
+            "port": 27017,           # &amp;lt;3&amp;gt;
+            "targetPort": 27017      # &amp;lt;4&amp;gt;
+         }
+      ],
+      "selector": {                  # &amp;lt;5&amp;gt;
+         "deploymentConfig": "mlbparks-MongoDB"
+      }
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;1&gt; Name of the service
+&lt;2&gt; Labels describing this service
+&lt;3&gt; Port where the service will be listening
+&lt;4&gt; Port in the pod to route the network traffic to
+&lt;5&gt; Label selector for determining which pods will be target for this service</p>
+</div>
+<div class="paragraph">
+<p>A service for the frontend component (JBoss EAP). This service will be configured to target all pods running created with a label of <strong>deploymentConfig=mlbparks</strong> which happens
+for every pod created by the DeploymentConfig specified (as we can see in the DeploymentConfig for the frontend component).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "kind": "Service",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "mlbparks-http",           # &amp;lt;1&amp;gt;
+      "labels": {
+         "application": "mlbparks"       # &amp;lt;2&amp;gt;
+      },
+      "annotations": {
+         "description": "The web server's http port"
+      }
+   },
+   "spec": {
+      "ports": [
+         {
+            "port": 8080,                # &amp;lt;3&amp;gt;
+            "targetPort": 8080           # &amp;lt;4&amp;gt;
+         }
+      ],
+      "selector": {
+         "deploymentConfig": "mlbparks"  # &amp;lt;5&amp;gt;
+      }
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;1&gt; Name of the service
+&lt;2&gt; Labels describing this service
+&lt;3&gt; Port where the service will be listening
+&lt;4&gt; Port in the pod to route the network traffic to
+&lt;5&gt; Label selector for determining which pods will be target for this service</p>
+</div>
+<div class="paragraph">
+<p>JBoss EAP currently needs an additional service for it&#8217;s internal PING service, that is used for clustering purposes. This service will be configured to target all pods running created with a label of <strong>deploymentConfig=mlbparks</strong> which happens for every pod created by the DeploymentConfig specified (as we can see in the DeploymentConfig for the frontend component).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "kind": "Service",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "mlbparks-ping",           # &amp;lt;1&amp;gt;
+      "labels": {
+         "application": "mlbparks"       # &amp;lt;2&amp;gt;
+      },
+      "annotations": {
+         "description": "Ping service for clustered applications"
+      }
+   },
+   "spec": {
+      "ports": [
+         {
+            "port": 8888,                # &amp;lt;3&amp;gt;
+            "targetPort": 8888           # &amp;lt;4&amp;gt;
+         }
+      ],
+      "selector": {
+         "deploymentConfig": "mlbparks"  # &amp;lt;5&amp;gt;
+      }
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;1&gt; Name of the service
+&lt;2&gt; Labels describing this service
+&lt;3&gt; Port where the service will be listening
+&lt;4&gt; Port in the pod to route the network traffic to
+&lt;5&gt; Label selector for determining which pods will be target for this service</p>
+</div>
+<div class="paragraph">
+<p>Also, we want our application to be publicly available, so we expose the service providing HTTP access to the frontend component of the application as a route:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "kind": "Route",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "mlbparks-http-route",       # &amp;lt;1&amp;gt;
+      "labels": {
+         "application": "mlbparks"         # &amp;lt;2&amp;gt;
+      },
+      "annotations": {
+         "description": "Route for application's http service"
+      }
+   },
+   "spec": {
+      "host": "mlbparks.cloudapps.example.com", # &amp;lt;3&amp;gt;
+      "to": {                                   # &amp;lt;4&amp;gt;
+         "kind": "Service",
+         "name": "mlbparks-http"
+      }
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;1&gt; Name of the route
+&lt;2&gt; Set of labels to describe the route
+&lt;3&gt; DNS name used to access our application. This DNS name needs to resolve to the ip address of the <a href="https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/routes.html#routers">OpenShift router</a>.
+&lt;4&gt; Defines that this is a route to a service with the specified name</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_result">The result</h3>
+<div class="paragraph">
+<p>This is a graphical representation of the resources we have created for our application and that will be part of the template:</p>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="/posts/images/templates/OSEv3-Template.png" alt="OSEv3 Template">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_labeling_the_template">Labeling the template</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now, we should have a set of resources that we want to create as part of our "application" or "deployment" (sometimes how we name it can be confusing).
+As we want to identify univocally the resources we are deploying as a whole, it is important that all of them have at least one label for this purpose. In the previous code we have set in all of the resources a label of:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">"application": "mlbparks"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also, we can set different labels that will help us decorate some other parts of the deployment, like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">"deploymentConfig": "mlbparks"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>that helps us identify which DeploymentConfig we will link a Service to.</p>
+</div>
+<div class="sect2">
+<h3 id="labels">Labeling all resources in a template</h3>
+<div class="paragraph">
+<p>A more convenient and concise way of setting labels for the resources in a template is to set the labels to the template resource instead. These labels will be set on every resource created when processing the template.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "kind": "Template",
+   "apiVersion": "v1",
+   "metadata": {
+      ...
+   },
+   "labels": {                    # &amp;lt;1&amp;gt;
+      "application": "mlbparks",
+      "createdBy": "template-mlbparks"
+   },
+   "parameters": [
+      ...
+   ],
+   "objects": [
+      ...
+   ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;1&gt; Labels to describe all resources in the template.</p>
+</div>
+<div class="paragraph">
+<p>In this example we set two labels at the template scope, one that defines that all resources with that label were created by this template, and another label to describe that all resources belongs to the “mlbparks” application. There might be more resources in the future created in the project, that were not initially created by the template, but belongs to the “mlbparks” application.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_why_labels_are_important">why labels are important</h3>
+<div class="paragraph">
+<p>Labels can be used for filtering resources on a query, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc get buildconfig --selector="application=mlbparks"
+$ oc get deploymentconfig --selector="deploymentConfig=mlbparks"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also, they can be used to delete in one operation every resource we have created, like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc delete all --selector="application=mlbparks"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_make_it_reusable_parameterize_the_template">Make it reusable. Parameterize the template</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It is time to make the template reusable, as that is the main purpose of a template. For this, we will:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Identify what information will be parameterized</p>
+</li>
+<li>
+<p>Change values for parameters placeholders to make the template configurable</p>
+</li>
+<li>
+<p>Create the parameters section for the template</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>After we&#8217;ve done these 3 steps, parameters will be defined and the values will replace the placeholders when creating resources from this template.</p>
+</div>
+<div class="sect2">
+<h3 id="_identify_parameters">Identify parameters</h3>
+<div class="paragraph">
+<p>First thing we need to identify is what will be the information in the template we want to parameterize. Here we will be looking into things like the application name, git configuration, secrets, inter component communications configuration, DNS where to expose the Route, &#8230;&#8203;</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_set_the_parameter_placeholders">Set the parameter placeholders</h3>
+<div class="paragraph">
+<p>Once we know the parameters that we will be setting, we will replace the values with a parameter placeholder, so when we process the template, the provided values replace the placeholders.</p>
+</div>
+<div class="paragraph">
+<p>A property placeholder will look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">${MY_PARAMETER_NAME}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And we will have something like the following for one of our BuildConfig:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "kind": "BuildConfig",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "${APPLICATION_NAME}",
+      "labels": {
+         "application": "${APPLICATION_NAME}"
+      }
+   },
+   "spec": {
+      "triggers": [
+         {
+            "type": "Generic",
+            "generic": {
+               "secret": "${GENERIC_TRIGGER_SECRET}"
+            }
+         },
+         {
+            "type": "GitHub",
+            "github": {
+               "secret": "${GITHUB_TRIGGER_SECRET}"
+            }
+         },
+         {
+            "type": "ImageChange",
+            "imageChange": {}
+         }
+      ],
+      "source": {
+         "type": "Git",
+         "git": {
+            "uri": "${GIT_URI}",
+            "ref": "${GIT_REF}"
+         }
+      },
+      "strategy": {
+         "type": "Source",
+         "sourceStrategy": {
+            "from": {
+               "kind": "ImageStreamTag",
+               "namespace": "openshift",
+               "name": "jboss-eap6-openshift:${EAP_RELEASE}"
+            }
+         }
+      },
+      "output": {
+         "to": {
+            "kind": "ImageStreamTag",
+            "name": "${APPLICATION_NAME}:latest"
+         }
+      }
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_the_parameters">Create the parameters</h3>
+<div class="paragraph">
+<p>Once we have set all the placeholders in the resources, we will create a section in the template for the parameters. There will be <a href="https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/templates.html#parameters">2 types of parameters</a>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Parameters with auto generated values (using a regexp like expression)</p>
+</li>
+<li>
+<p>Parameters with default values (maybe empty value)</p>
+</li>
+<li>
+<p>Required parameters. When a parameter is required, empty value is not valid (new in OpenShift 3.0.2).</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">   "parameters": [
+      {
+         "description": "EAP Release version, e.g. 6.4, etc.",
+         "name": "EAP_RELEASE",
+         "value": "6.4"
+      },
+      {
+         "description": "The name for the application.",
+         "name": "APPLICATION_NAME",
+         "value": "mlbparks"
+      },
+      {
+         "description": "Custom hostname for service routes.",
+         "name": "APPLICATION_HOSTNAME"
+      },
+      {
+         "description": "Git source URI for application",
+         "name": "GIT_URI",
+         "value": "https://github.com/jorgemoralespou/openshift3mlbparks.git"
+      },
+      {
+         "description": "Git branch/tag reference",
+         "name": "GIT_REF",
+         "value": "master"
+      },
+      {
+         "description": "Database name",
+         "name": "MONGODB_DATABASE",
+         "value": "root"
+      },
+      {
+         "description": "Database user name",
+         "name": "MONGODB_USER",
+         "from": "user[a-zA-Z0-9]{3}",
+         "generate": "expression"
+      },
+      {
+         "description": "Database user password",
+         "name": "MONGODB_PASSWORD",
+         "from": "[a-zA-Z0-9]{8}",
+         "generate": "expression"
+      },
+      {
+         "description": "Github trigger secret",
+         "name": "GITHUB_TRIGGER_SECRET",
+         "from": "[a-zA-Z0-9]{8}",
+         "generate": "expression"
+      },
+      ....
+   ]</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+It is important to note that we have generated a random user name and password for the database with an expression and that the values will get injected in the ENV variables for both pods (web and database), so they will be in sync with respect to the user and password credentials to use.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Now we are all set, we do have a template. You can see the <a href="https://github.com/jorgemoralespou/openshift3mlbparks/blob/master/mlbparks-template.json">full source of the template</a>.</p>
+</div>
+<div class="paragraph">
+<p>As can be seen, this template defines 8 new resources.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_the_template_in_openshift">Create the template in OpenShift</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We need to create the template in OpenShift to make it ready for use. We need to do it with the CLI and we will be able to create it for:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>General use</p>
+</li>
+<li>
+<p>Only for use in a Project</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_registering_the_template_for_general_use">Registering the template for General Use</h3>
+<div class="paragraph">
+<p>We will execute the creation of the template as user cluster-admin and the template will be registered in the <strong>openshift</strong> project (which is internal to OpenShift for holding shared resources)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc create -f my_template.json -n openshift</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_registering_the_template_for_use_in_a_project">Registering the template for use in a Project</h3>
+<div class="paragraph">
+<p>We will execute the creation of the template as a user in the current project. (The user will need to have the appropriate roles to create "Template" resources in the current project)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc create -f my_template.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the user belongs to multiple projects, and wants to create the template in a different project from the one he&#8217;s currently working on, he can do it with <strong>-n &lt;project&gt;</strong>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc create -f my_template.json -n &lt;project&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_inspecting_a_template">Inspecting a template</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before using a template, we need to know:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the template name</p>
+</li>
+<li>
+<p>the description of the template</p>
+</li>
+<li>
+<p>the expected parameters</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_list_all_the_available_templates">List all the available templates</h3>
+<div class="paragraph">
+<p>For viewing all the available templates for use (using the CLI) we will have to list the templates in the "openshift" project and in the user&#8217;s current project.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc get templates -n openshift
+$ oc get templates</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>From this list, we will get the name of the template we want to use.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_inspect_a_template">Inspect a template</h3>
+<div class="paragraph">
+<p>We need more information about the template, so we are going to describe the template:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc describe template mlbparks
+Name:    mlbparks
+Created: 7 days ago
+Labels:     &lt;none&gt;
+Description:   Application template for MLB Parks application on EAP 6 &amp;amp; MongoDB built using STI
+Annotations:   iconClass=icon-jboss
+
+Parameters:
+    Name:      EAP_RELEASE
+    Description:  EAP Release version, e.g. 6.4, etc.
+    Value:     6.4
+    Name:      APPLICATION_NAME
+    Description:  The name for the application.
+    Value:     mlbparks
+    Name:      APPLICATION_HOSTNAME
+    Description:  Custom hostname for service routes.
+    Value:     &lt;none&gt;
+    Name:      GIT_URI
+    Description:  Git source URI for application
+    Value:     https://github.com/jorgemoralespou/openshift3mlbparks.git
+    Name:      GIT_REF
+    Description:  Git branch/tag reference
+    Value:     master
+    Name:      MONGODB_DATABASE
+    Description:  Database name
+    Value:     root
+    Name:      MONGODB_NOPREALLOC
+    Description:  Disable data file preallocation.
+    Value:     &lt;none&gt;
+    Name:      MONGODB_SMALLFILES
+    Description:  Set MongoDB to use a smaller default data file size.
+    Value:     &lt;none&gt;
+    Name:      MONGODB_QUIET
+    Description:  Runs MongoDB in a quiet mode that attempts to limit the amount of output.
+    Value:     &lt;none&gt;
+    Name:      MONGODB_USER
+    Description:  Database user name
+    Generated:    expression
+    From:      user[a-zA-Z0-9]{3}
+
+    Name:      MONGODB_PASSWORD
+    Description:  Database user password
+    Generated:    expression
+    From:      [a-zA-Z0-9]{8}
+
+    Name:      MONGODB_ADMIN_PASSWORD
+    Description:  Database admin password
+    Generated:    expression
+    From:      [a-zA-Z0-9]{8}
+
+    Name:      GITHUB_TRIGGER_SECRET
+    Description:  Github trigger secret
+    Generated:    expression
+    From:      [a-zA-Z0-9]{8}
+
+    Name:      GENERIC_TRIGGER_SECRET
+    Description:  Generic build trigger secret
+    Generated:    expression
+    From:      [a-zA-Z0-9]{8}
+
+
+Object Labels: template=mlbparks
+
+Objects:
+    BuildConfig      ${APPLICATION_NAME}
+    ImageStream      ${APPLICATION_NAME}
+    DeploymentConfig ${APPLICATION_NAME}-MongoDB
+    DeploymentConfig ${APPLICATION_NAME}
+    Route      ${APPLICATION_NAME}-http-route
+    Service    MongoDB
+    Service    ${APPLICATION_NAME}-http
+    Service    ${APPLICATION_NAME}-ping</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_resources_from_a_template">Creating resources from a template</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now we are ready to instantiate our template. We will provide our own values for the parameters defined in the template.
+The processing of the template will create all the resources defined by the template in the current project.</p>
+</div>
+<div class="sect2">
+<h3 id="_from_the_web_ui">From the Web UI</h3>
+<div class="paragraph">
+<p>To create the resources from an uploaded template using the web console:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="1">
+<li>
+<p>While in the desired project, click on the "Create&#8230;&#8203;" button:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="/posts/images/templates/create.png" alt="Create">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Select a template from the list of templates in your project, or provided by the global template library:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="/posts/images/templates/template_selection.png" alt="Select">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>View template parameters in the template creation screen:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="/posts/images/templates/create_1.png" alt="View">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>Modify template parameters in the template creation screen by clicking ‘edit parameters’:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="/posts/images/templates/create_2.png" alt="Modify">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="5">
+<li>
+<p>Click create. This will create all the processed resources defined in the template in the current project. Sequentially, builds and deploys will happen and finally you will have all components ready to accept connections.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="/posts/images/templates/app.png" alt="Application">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_from_the_cli">From the CLI</h3>
+<div class="paragraph">
+<p>From command line, we can use new-app command to process the template (substitute the parameter placeholders with the values provided) and create the resources in OpenShift.</p>
+</div>
+<div class="paragraph">
+<p>We can create the resources using a template that is loaded in OpenShift:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">$ oc new-app mlbparks -p APPLICATION_NAME=mlbparks</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+We can also specify <strong>--template=mlbparks</strong> instead of just the template name to be more precise.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Or we can create the resources using the template JSON file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">$ oc new-app my_template.json -p APPLICATION_NAME=mlbparks</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+We can also specify <strong>--file=my_template.json</strong> instead of the template file to be more precise.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_a_template_from_existing_resources">Creating a template from existing resources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes it happens that you already have some resources deployed into your project and you want to create a template out of them. OpenShift helps you on this task, and the steps you&#8217;ll need will involve many of the concepts we&#8217;ve already described.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Create the template from resources in your project</p>
+</li>
+<li>
+<p>Parameterize the template</p>
+</li>
+<li>
+<p>Deploy the template into OpenShift</p>
+</li>
+<li>
+<p>Instantiate the template (create resources defined in the template with the parameter values supplied by the user)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>From all these steps, only the first one is new.</p>
+</div>
+<div class="sect2">
+<h3 id="_create_a_template_from_a_project">Create a template from a project</h3>
+<div class="paragraph">
+<p>We can use the existing command <strong>oc export</strong> to define all the resources in the current project we want to export, and while doing it, we will instruct the command to create a template file, with <strong>--as-template=&lt;template_name&gt;</strong>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">$ oc export --as-template=my_template</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will export all the resources in the current project. If we want to limit the resources that should be defined in the template, we can do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">// export all services to a template
+$ oc export service --all --as-template=my_template
+
+// export the services and deployment configurations labeled name=test
+oc export svc,dc -l name=test --as-template=my_template</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Remember this will print the template in stdout, so if we want to have the template in a file, we can redirect the output into a file. We can also specify the format for the template as JSON or YAML.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">$ oc export -o json --as-template=my_template &amp;gt; my_template.json
+$ oc export -o yaml --as-template=my_template &amp;gt; my_template.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: Remember that this export step is really just the beginning of creating a template from existing resources. Once you have the template file, you&#8217;ll have to modify it and adapt it as well as parameterize it to make it configurable.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_things_you_should_remember">Things you should remember</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Finally, some important things you should remember when creating templates.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Design your template visually, as it helps understand the required components.</p>
+</li>
+<li>
+<p>Provide meaningful names to resources and use labels to describe your resources (labels are used as selectors for some resources).</p>
+</li>
+<li>
+<p>Templates can be shared or per-project, and common templates are in the <strong>openshift</strong> namespace/project.</p>
+</li>
+<li>
+<p>Currently there is no ability to set a Readme on templates, so be as verbose and complete in the template&#8217;s description.</p>
+</li>
+<li>
+<p>Once the resources in a template are processed and deployed, they can be modified with the CLI.</p>
+</li>
+<li>
+<p>You should constrain the CPU and memory a container in a pod can use.</p>
+</li>
+<li>
+<p>When the resources in a template are created, if there is a BuildConfiguration defined, it will only start an automated build if there is an ImageChange trigger defined. This will change in the next release and we will be able to launch a build on resource creation.</p>
+</li>
+<li>
+<p>Parameterize everything a user of your template might want to customize so they can control the behavior of the template when they instantiate it.
+&lt;/template_name&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/none&gt;&lt;/project&gt;&lt;/project&gt;&lt;/note12&gt;&lt;/labels&gt;&lt;/note12&gt;&lt;/tag&gt;&lt;/image&gt;&lt;/name&gt;&lt;/image&gt;</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+    </div
+
+    <footer class="page__meta">
+      <p class="page__taxonomy">
+         <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+         <span itemprop="keywords">
+               <a href="/tags/#openshift" class="page__taxonomy-item" rel="tag">openshift</a><a href="/tags/#origin" class="page__taxonomy-item" rel="tag">origin</a><a href="/tags/#applications" class="page__taxonomy-item" rel="tag">applications</a><a href="/tags/#templates" class="page__taxonomy-item" rel="tag">templates</a>
+         </span>
+      </p>
+
+      <p class="page__taxonomy">
+         <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+         <span itemprop="keywords">
+            <a href="/categories/#devexp" class="page__taxonomy-item" rel="categories">devexp</a>
+         </span>
+      </p>
+
+      <p class="page__date">
+            <strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:  </strong>August 14, 2015</p>
+   </footer>
+
+   <!--
+   <section class="page__share">
+      <h4 class="page__share-title">Share on</h4>
+         <a href="https://twitter.com/intent/tweet?via=UnPOUcoDe&text=Configuring your application, Part 2 http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+         <a href="https://www.facebook.com/sharer/sharer.php?u=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+         <a href="https://plus.google.com/share?url=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+         <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+   </section>
+
+<nav class="pagination">
+<a href="http://jorgemoral.es/devexp/configuring-your-app-1/" class="pagination--pager" title="Configuring your application, Part 1
+">Previous</a>
+<a href="#" class="pagination--pager disabled">Next</a>
+</nav>
+</div>
+-->
+</article>
+
+    </div>
+
+    <div class="page__footer">
+        <footer>
+            <!-- start custom footer snippets -->
+            <!-- end custom footer snippets -->
+            <div class="page__footer-follow">
+                <ul class="social-icons">
+                    <li><strong>Follow:</strong></li>
+                    <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                    <li><a href="http://jorgemoral.es/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+                </ul>
+            </div>
+            <div class="page__footer-copyright">&copy; 2016 Jorge Morales Pou.</div>
+        </footer>
+    </div>
+    <script src="/js/main.min.js"></script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-81343831-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+
+</html>
+

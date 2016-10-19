@@ -1,0 +1,554 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- begin SEO -->
+    <title>Learn the Origin</title>
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Learn the Origin">
+    <meta property="og:title" content="Learn the Origin">
+    <link rel="canonical" href="http://jorgemoral.es/">
+    <meta property="og:url" content="http://jorgemoral.es/">
+    <meta name="twitter:site" content="@UnPOUcoDe">
+    <meta name="twitter:title" content="Learn the Origin">
+    <meta name="twitter:description" content="Touching containers, orchestration and application development properly mixed with a little touch of real life experience">
+    <meta name="twitter:url" content="http://jorgemoral.es/">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Person",
+            "name": "Jorge Morales Pou",
+            "url": "http://jorgemoral.es",
+            "sameAs": ["https://twitter.com/UnPOUcoDe", "https://www.linkedin.com/in/jorgemoralespou", "https://github.com/jorgemoralespou"]
+        }
+    </script>
+    <!-- end SEO -->
+    <link href="http://jorgemoral.es/feed.xml" type="application/atom+xml" rel="alternate" title="Learn the Origin Feed">
+    <title>jorgemoral.es ::
+        Improving Build Time of Java Builds on OpenShift
+    </title>
+    <!--
+    <link rel="stylesheet" href="/css/stylesheet.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    -->
+    <meta name="generator" content="Nanoc 4.3.4">
+
+    <!-- For all browsers -->
+    <link rel="stylesheet" href="/css/main.css">
+    <meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+    <!-- insert favicons. use http://realfavicongenerator.net/ -->
+    <link rel="stylesheet" href="/css/asciidoc-pygments.css">
+</head>
+
+<body  class="layout--single">
+    <div class="masthead">
+        <div class="masthead__inner-wrap">
+            <div class="masthead__menu">
+                <nav id="site-nav" class="greedy-nav">
+                    <button><div class="navicon"></div></button>
+                    <ul class="visible-links">
+                        <li class="masthead__menu-item masthead__menu-item--lg"><a href="/">Learn the Origin</a></li>
+                        <li class="masthead__menu-item"><a href="/categories">Categories</a></li>
+                        <li class="masthead__menu-item"><a href="/tags">Tags</a></li>
+                        <li class="masthead__menu-item"><a href="/all-posts">All posts</a></li>
+                        <!--
+                        <li class="masthead__menu-item"><a href="/year-archive">By year</a></li>
+                        -->
+                        <li class="masthead__menu-item"><a href="/presentations">Presentations</a></li>
+                        <li class="masthead__menu-item"><a href="/conferences">Conferences</a></li>
+                        <li class="masthead__menu-item"><a href="/about">About me</a></li>
+                    </ul>
+                    <ul class="hidden-links hidden"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+<!--  USE Breadcrumbs Helper
+
+    <nav class="breadcrumbs">
+      <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.es/" itemprop="item"><span itemprop="name">Home</span></a>
+              <meta itemprop="position" content="1" />
+            </li>
+            <span class="sep">/</span>
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.esdevexp" itemprop="item"><span itemprop="name">Devexp</span></a>
+              <meta itemprop="position" content="2" />
+            </li>
+            <span class="sep">/</span>
+            <li class="current">Configuring your application, Part 2</li>
+      </ol>
+    </nav>
+-->
+
+    <div id="main" role="main">
+        <div class="sidebar sticky">
+            <div itemscope itemtype="http://schema.org/Person">
+                <div class="author__avatar">
+                    <img src="/images/bio-photo.jpg" class="author__avatar" alt="Jorge Morales">
+                </div>
+                <div class="author__content">
+                    <h3 class="author__name">Jorge Morales</h3>
+                    <p class="author__bio">OpenShift Developer Advocate working for Red Hat.<br/>Drop me a tweet if you want me to blog about a topic</p>
+                </div>
+
+                <div class="author__urls-wrapper">
+                    <button class="btn btn--inverse">Follow</button>
+                    <ul class="author__urls social-icons">
+                        <li><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Madrid, Spain</li>
+                        <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                        <li><a href="https://github.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitHub</a></li>
+                        <li><a href="https://gitlab.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitLab</a></li>
+                        <li><a href="https://www.linkedin.com/in/jorgemoralespou"><i class="fa fa-fw fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+<article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <div class="page__inner-wrap">
+        <header>
+            <h1 class="page__title" itemprop="headline">Improving Build Time of Java Builds on OpenShift</h1>
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                15 minutes
+                    Posted:
+                    18/Jan/2016 by
+                        Jorge Morales
+            </p>
+        </header>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>As you might know, OpenShift 3 Enterprise provides Middleware Services (xPaas), which is a set of Java based images for JBoss EAP, JBoss EWS (Tomcat), JBoss Fuse Integration Services, JBoss A-MQ, JBoss Decision Server and JBoss Data Grid. Also, OpenShift Origin provides an additional JBoss based images for Wildfly, our application server community project. All these images are <a href="https://github.com/openshift/source-to-image/">source-to-image (S2I)</a> enable, that means that will get your application source code built (using Maven) and layered into the application container.</p>
+</div>
+<div class="paragraph">
+<p>When working with Maven, it is very common to use a Central Artifact Repository Manager in your organization for centralizing and managing all the required and generated dependencies, as well as providing you with isolation from the real location of the artifacts in the Internet and some security mechanisms, amongst other features. During my life as a developer and consultant I&#8217;ve been working with Nexus Artifact Manager for this purpose. I will not say that it&#8217;s the best or worst, but only that it is the one most familiar to me, and because of that, I will be using it in my OpenShift install.</p>
+</div>
+<div class="paragraph">
+<p>It is important to note that everything I will describe can be executed in OpenShift Enterprise or Origin, the only requirement is, that if you&#8217;re using the Middleware Services images you should have the corresponding subscriptions for running them.</p>
+</div>
+<div class="paragraph">
+<p>The first thing we need to do is to lay out our OpenShift architecture. I&#8217;ve decided to deploy Nexus as a service in OpenShift, for that purpose I have created a <a href="https://github.com/jorgemoralespou/nexus-ose/tree/master/nexus/nexus-container">Nexus image</a> (not supported) that I will be building and deploying internally in my OpenShift instance, in a project that I&#8217;ve called <strong>ci</strong>. This project name is important as it will be used to reference the nexus instance. It is part of the service DNS name.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc new-project ci --display-name="Continuous Integration for OpenShift" --description="This project holds all continuous integration required infrastructure, like Nexus, Jenkins,..."
+
+$ oc create -f https://raw.githubusercontent.com/jorgemoralespou/nexus-ose/master/nexus/ose3/nexus-resources.json -n ci</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">The steps above will create a project called <strong>ci</strong>, and it will add some OpenShift resources to the project, namely</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A nexus <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/nexus/ose3/nexus-resources.json#L8-L15"><strong>ServiceAccount</strong></a> for using in build</p>
+</li>
+<li>
+<p>A <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/nexus/ose3/nexus-resources.json#L16-L69"><strong>BuildConfig</strong></a> for building the Nexus image, based on Centos7, that will be published into a <strong>nexus</strong> ImageStream. When the BuildConfig gets deployed, a nexus build will be triggered.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+I&#8217;ve used the <a href="https://github.com/sonatype/docker-nexus/blob/master/oss/Dockerfile">official sonatype nexus image&#8217;s Dockerfile</a> as base and extended with my own requirements for the purpose of this blog, like making sure any user will be able to deploy the image with an OpenShift restricted policy, or adding configuration to use Red Hat&#8217;s JBoss mave repositories.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The build will take some time, so <strong>be patient!</strong>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/nexus_build.png" alt="Nexus build">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Both <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/nexus/ose3/nexus-resources.json#L70-L80">centos7</a> and <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/nexus/ose3/nexus-resources.json#L81-L96">nexus</a> <strong>ImageStream</strong> definitions</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/nexus_imagestreams.png" alt="ImagesStreams">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Two <strong>Template</strong>`s called <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/nexus/ose3/nexus-resources.json#L97-L291">nexus-ephemeral</a> and <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/nexus/ose3/nexus-resources.json#L292-L511">nexus-persistent</a>.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/template.png" alt="Templates">
+</div>
+</div>
+<div class="paragraph">
+<p>The templates that are provided as part of the loaded resources will allow you to deploy an instance of the Nexus image built, using the nexus ServiceAccount, and configured to have a service on port 8081 and a route on whatever hostname you decide, for external access. Also, these templates will allow you to have a persistent instance of Nexus, using a <a href="https://docs.openshift.org/latest/dev_guide/volumes.html">PersistentVolume</a> or working in an ephemeral mode, where if the nexus replica dies, you&#8217;ll lose all of your cached dependencies. For testing purposes, it&#8217;s much easier to setup the ephemeral instance, but for a more real usage, you should consider only the persistent image.</p>
+</div>
+<div class="paragraph">
+<p>There is full instruction on how to set the persistent volume and all the requirements in the <a href="https://github.com/jorgemoralespou/nexus-ose">README file in the Github repository</a></p>
+</div>
+<div class="paragraph">
+<p>In this example, I will deploy the ephemeral version, with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">oc new-app --template=nexus-ephemeral --param=APPLICATION_HOSTNAME=nexus.apps.10.2.2.2.xip.io</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also deploy your nexus instance using the OpenShift console:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/nexus_template_instance.png" alt="Create a nexus instance">
+</div>
+</div>
+<div class="paragraph">
+<p>It is very important to understand that the nexus instance will not be deployed until the build process has finished, and this can take quite some time, so <strong>be patient!</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/nexus_pod.png" alt="Nexus deployed">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The value provided to APPLICATION_HOSTNAME is dependant on your installation. My OpenShift environment default application domain is apps.10.2.2.2.xip.io
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We can access our nexus instance through the <strong>APPLICATION_HOSTNAME</strong> value we have provided, and check what repositories are in there. Default credentials for this nexus instance are (<strong>admin/admin123</strong>). It is important to note, that this Nexus server comes already configured with some Red Hat JBoss repositories, to allow our S2I images to fetch the appropriate dependencies.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/nexus_console.png" alt="Repository view">
+</div>
+</div>
+<div class="paragraph">
+<p>What we need now is a way of instructing our JBoss S2I builder images to use this nexus instance as artifact repository manager. There is some alternatives to this, of which I will show two of them.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_the_provided_s2i_builder">Using the provided S2I builder</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>JBoss EAP S2I Builder Image version 1.2, which is the latest version of the builder image, that comes with OpenShift Enterprise 3.1, it provides an environment variable that can be set to point to a maven mirror url, unsurprisingly it is called <strong>MAVEN_MIRROR_URL</strong>. I will use that variable to get the maven artifacts through our Nexus instance.</p>
+</div>
+<div class="paragraph">
+<p>To check that our builds will use our internal nexus instance, we can browse to the public group page and verify that there is no dependency currently stored.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/repo_empty.png" alt="Empty group">
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s create a new project and create a sample application using nexus.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc new-project eap-nexus-builds --display-name="EAP builds with Nexus" --description="Building Applications in EAP using Nexus for dependency management"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the application, we will be using the EAP S2I Builder image, and we will use the default sample project, and we will set a build MAVEN_MIRROR_URL.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/eap_app.png" alt="Creating an EAP app using Nexus">
+</div>
+</div>
+<div class="paragraph">
+<p>You should notice that I&#8217;ve used internal DNS name of our nexus instance, which is <strong>nexus.ci.svc.cluster.local</strong>, which follows the pattern &lt;service-name&gt;.&lt;project&gt;.svc.cluster.local for services. This is a very powerful feature of OpenShift that provides DNS names for every service, <a href="https://docs.openshift.org/latest/architecture/additional_concepts/networking.html#openshift-dns">and much more</a>.</p>
+</div>
+<div class="paragraph">
+<p>When building the application, we will notice that maven dependencies are being pulled from our nexus instance, instead of the default public Red Hat JBoss' repositories.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/eap_app_build.png" alt="EAP Builds">
+</div>
+</div>
+<div class="paragraph">
+<p>Once our build is finished, we will also see how our nexus repository artifact group is filled with all the dependencies that have been pulled down.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/repo_full.png" alt="Dependencies in repo">
+</div>
+</div>
+<div class="paragraph">
+<p>And we will have our application running.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/eap_builds.png" alt="Builds">
+</div>
+</div>
+<div class="paragraph">
+<p>Here, we can a historical view of the builds before and after setting MAVEN_MIRROR_URL. The first build in OpenShift always takes longer than any other build as it has to push all the base layers to the registry after the build. Successive builds will just push the application layer. From build #2 to #5 we can see the time it takes a normal build, without using Nexus, averaging <strong>1 minute and 13 seconds</strong></p>
+</div>
+<div class="paragraph">
+<p>Build #7 introduces the change with MAVEN_MIRROR_URL set, but as this is the first build after the environment variable has been set, it still took <strong>1 minute and 8 seconds</strong> to complete. This build was populating Nexus with all the pulled down dependencies.</p>
+</div>
+<div class="paragraph">
+<p>In builds #8 to #10 we can see that the average time it takes now to build is <strong>42 seconds</strong></p>
+</div>
+<div class="paragraph">
+<p>As can be seen, we get an average benefit of <strong>31 seconds</strong> in building time after introducing our integration with an artifact repository manager, like Nexus.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_modifying_the_s2i_builder">Modifying the S2I builder</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Not always one can have the comfort of working with S2i builder images that expose the ability to set a Maven mirror like the Middleware Services images provided by Red Hat does, in that cases you need to think of other mechanisms to integrate these images with an artifact repository manager.</p>
+</div>
+<div class="paragraph">
+<p>The options can vary, ranging from  the most obvious, modify or extend the builder image, using incremental builds, up to creating builder image from scratch. Since I do not like modifying existing images, especially those created by others, I will show how to extend existing Wildfly S2I Builder images to make use of a Nexus artifact repository manager. The same approach can be used with any other builder image, and some other technologies that use or can benefit from the use of an artifact repository manager, especially that Nexus or Artifactory support storing dependencies for other languages than just java.</p>
+</div>
+<div class="paragraph">
+<p>I have created a file that will install all the required resources needed to work with the Nexus instance provided in the OpenShift install. These resources are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>3 <strong>BuildConfigs</strong>, for <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/wildfly-nexus-resources.json#L8-L58">Wildfly 8</a>,  <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/wildfly-nexus-resources.json#L59-L109">Wildfly 9</a> and  <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/wildfly-nexus-resources.json#L110-L160">Wildfly 10</a>.</p>
+</li>
+<li>
+<p>6 <strong>ImageStreams</strong>, one for each of the original ImageStreams for every Wildfly version (<a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/wildfly-nexus-resources.json#L110-L160">8</a>, <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/wildfly-nexus-resources.json#L110-L160">9</a> and <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/wildfly-nexus-resources.json#L228-L260">10</a>) and another one for each of the modified S2I builder images for Wildfly integrated with nexus (<a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/wildfly-nexus-resources.json#L261-L283">8</a>, <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/wildfly-nexus-resources.json#L284-L305">9</a> and <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/wildfly-nexus-resources.json#L306-L327">10</a>).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The change that I’ve done to the default Wildfly S2I builder image is as simple as <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/8.1/Dockerfile#L1-L3">providing an overloaded settings.xml file in my custom S2I builder</a> images that points to the <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/builders/wildfly-nexus/8.1/settings.xml#L17">nexus artifact repository manager</a>. This change is the easiest to prove this functionality, although probably a better option would be to provide environment variable to customize the assembly process.</p>
+</div>
+<div class="paragraph">
+<p>To install the Wildfly version:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc new-project wildfly-nexus-builds --display-name="Wildfly builds with Nexus" --description="Building Applications in Wildfly using Nexus for dependency management"
+
+$ oc create -f https://raw.githubusercontent.com/jorgemoralespou/nexus-ose/master/builders/wildfly-nexus/wildfly-nexus-resources.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once we have our custom Wildfly S2I images built,</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/wildfly-nexus-builds.png" alt="Builds">
+</div>
+</div>
+<div class="paragraph">
+<p>we can just create a sample application with them.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc new-app --docker-image=wildfly-nexus-9 --strategy=source --code=https://github.com/bparees/openshift-jee-sample.git --name='wildfly-nexus-sample'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here, we see as well that our build process is fetching the required maven dependencies from the provided Nexus artifact repository manager.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/wildfly_builds.png" alt="Builds">
+</div>
+</div>
+<div class="paragraph">
+<p>This first build took <strong>3 minutes and 11 seconds</strong>, it includes building with the plain wildfly-9 image available on Github, and the time needed to pull down the image. This image was not doing any dependency management.</p>
+</div>
+<div class="paragraph">
+<p>In the second build, I updated the BuildConfig to use wildfly-nexus-9 builder image and this build took <strong>1 minutes and 24 seconds</strong>. The reason for that is that Nexus was caching all the dependencies, since I used a clean nexus instance.</p>
+</div>
+<div class="paragraph">
+<p>On the third and fourth build, all the dependencies were already cached in Nexus and build time dropped to <strong>37 and 35 seconds</strong>, respectively.</p>
+</div>
+<div class="paragraph">
+<p>As in the previous example, with EAP, we get a benefit of more than 40 seconds in our build time by using an artifact repository manager, like Nexus.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_incremental_build">Using incremental build</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Another option, I’ve mentioned before, we can use to improve Maven based Java builds in OpenShift is to enable the <a href="https://docs.openshift.com/enterprise/3.1/dev_guide/builds.html#incremental-builds">incremental builds</a>. Unfortunately not all images support this feature, since it requires the existence of <a href="https://docs.openshift.com/enterprise/3.1/creating_images/s2i.html#s2i-scripts">save-artifacts</a> script, responsible for saving artifacts used during builds. In our cases these will be maven dependencies. This will have the same behavior as having a local maven repository into the build image itself, with the drawback of reaching out for the previously built image and getting the dependencies out of it.</p>
+</div>
+<div class="paragraph">
+<p>To test this mode, I have created a <a href="https://raw.githubusercontent.com/jorgemoralespou/nexus-ose/master/other/eap-incremental/eap-incremental-resources.json">sample resources file</a> that can be easily tested.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oc new-project eap-incremental-builds --display-name="EAP incremental builds" --description="Building Applications in EAP using incremental build mode"
+
+$ oc create -f https://raw.githubusercontent.com/jorgemoralespou/nexus-ose/master/other/eap-incremental/eap-incremental-resources.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After we&#8217;ve created the resources, let&#8217;s do some builds and look at the times.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/eap_incremental_build.png" alt="EAP incremental build">
+</div>
+</div>
+<div class="paragraph">
+<p>As can be seen in the image above, the times for the second and third build, which are the builds benefiting from the stored artifacts takes much less time, <strong>48 and 47 seconds</strong>, but it&#8217;s the same time it takes when using the artifact repository manager, so there is no additional benefit in time, although it is much simpler for those images that support incremental mode, as the developer will only need to specify <a href="https://github.com/jorgemoralespou/nexus-ose/blob/master/other/eap-incremental/eap-incremental-resources.json#L57">a flag in the BuildConfig</a>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/eap_incremental_build_log.png" alt="EAP incremental buildlog">
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, the application and pulled down dependencies are not adding a big overhead in size to the initial eap64-openshift S2I image, only 7 MB.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/eap_image_sizes.png" alt="EAP incremental build">
+</div>
+</div>
+<div class="paragraph">
+<p>But we need to be careful with this approach as there are other images or applications that will have much more dependencies, and the size of the generated image can grow enormously. 130 MB in the following example using Fuse Integration Services.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/posts/images/speed_java_builds/fis_image_sizes.png" alt="FIS incremental build">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary">Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For every application that we build we will be getting a performance benefit by caching into an artifact repository manager it&#8217;s dependencies. Initially we will be perceiving a performance benefit for the second and subsequent builds of every application, but as the artifact repository manager stores more and more dependencies this benefit will be also seen in initial builds of new applications, and most of the dependencies will already be cached.</p>
+</div>
+<div class="paragraph">
+<p>Also, we can use incremental builds to get better performance on Java based builds, but it is important to understand that even this approach is easier to set up there are some drawbacks for this approach, like the need for the image to support incremental mode. Also, in this scenario, as the build process saves the dependencies within the image being built it means that if successive builds are run in different nodes, every node will have to first pull down the image from the OpenShift’s Docker registry which might take longer than pulling down the dependencies again.</p>
+</div>
+<div class="paragraph">
+<p>The most important benefit of using Nexus or any other artifact repository dependency manager is the security and the fact that dependencies downloaded by one developer/build will be reused over all the builds using the same dependencies. Whereas in the case of incremental builds only the dependencies downloaded during previous build can be reused and only by the same build. This might have huge impact for any Java-based organization.</p>
+</div>
+<div class="paragraph">
+<p>In this blog, I&#8217;ve highlighted how we can improve the build time of Maven based Java builds in OpenShift, but also a very important topic is the use of the internal DNS service names to reference from one project to another. The only caveat to this, is that if we are using the multi-tenant OVS networking plugin, our cluster administrators will have to make visible our <strong>ci</strong> project to all other projects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ oadm pod-network make-projects-global ci</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;/project&gt;&lt;/service-name&gt;</p>
+</div>
+</div>
+</div>
+    </div
+
+    <footer class="page__meta">
+      <p class="page__taxonomy">
+         <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+         <span itemprop="keywords">
+               <a href="/tags/#openshift" class="page__taxonomy-item" rel="tag">openshift</a><a href="/tags/#origin" class="page__taxonomy-item" rel="tag">origin</a><a href="/tags/#builds" class="page__taxonomy-item" rel="tag">builds</a><a href="/tags/#maven" class="page__taxonomy-item" rel="tag">maven</a><a href="/tags/#java" class="page__taxonomy-item" rel="tag">java</a><a href="/tags/#nexus" class="page__taxonomy-item" rel="tag">nexus</a>
+         </span>
+      </p>
+
+      <p class="page__taxonomy">
+         <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+         <span itemprop="keywords">
+            <a href="/categories/#devexp" class="page__taxonomy-item" rel="categories">devexp</a>
+         </span>
+      </p>
+
+      <p class="page__date">
+            <strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:  </strong>January 18, 2016</p>
+   </footer>
+
+   <!--
+   <section class="page__share">
+      <h4 class="page__share-title">Share on</h4>
+         <a href="https://twitter.com/intent/tweet?via=UnPOUcoDe&text=Configuring your application, Part 2 http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+         <a href="https://www.facebook.com/sharer/sharer.php?u=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+         <a href="https://plus.google.com/share?url=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+         <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+   </section>
+
+<nav class="pagination">
+<a href="http://jorgemoral.es/devexp/configuring-your-app-1/" class="pagination--pager" title="Configuring your application, Part 1
+">Previous</a>
+<a href="#" class="pagination--pager disabled">Next</a>
+</nav>
+</div>
+-->
+</article>
+
+    </div>
+
+    <div class="page__footer">
+        <footer>
+            <!-- start custom footer snippets -->
+            <!-- end custom footer snippets -->
+            <div class="page__footer-follow">
+                <ul class="social-icons">
+                    <li><strong>Follow:</strong></li>
+                    <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                    <li><a href="http://jorgemoral.es/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+                </ul>
+            </div>
+            <div class="page__footer-copyright">&copy; 2016 Jorge Morales Pou.</div>
+        </footer>
+    </div>
+    <script src="/js/main.min.js"></script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-81343831-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+
+</html>
+

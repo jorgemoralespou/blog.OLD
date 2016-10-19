@@ -1,0 +1,414 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- begin SEO -->
+    <title>Learn the Origin</title>
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Learn the Origin">
+    <meta property="og:title" content="Learn the Origin">
+    <link rel="canonical" href="http://jorgemoral.es/">
+    <meta property="og:url" content="http://jorgemoral.es/">
+    <meta name="twitter:site" content="@UnPOUcoDe">
+    <meta name="twitter:title" content="Learn the Origin">
+    <meta name="twitter:description" content="Touching containers, orchestration and application development properly mixed with a little touch of real life experience">
+    <meta name="twitter:url" content="http://jorgemoral.es/">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Person",
+            "name": "Jorge Morales Pou",
+            "url": "http://jorgemoral.es",
+            "sameAs": ["https://twitter.com/UnPOUcoDe", "https://www.linkedin.com/in/jorgemoralespou", "https://github.com/jorgemoralespou"]
+        }
+    </script>
+    <!-- end SEO -->
+    <link href="http://jorgemoral.es/feed.xml" type="application/atom+xml" rel="alternate" title="Learn the Origin Feed">
+    <title>jorgemoral.es ::
+        Part 1 - From app to OpenShift
+    </title>
+    <!--
+    <link rel="stylesheet" href="/css/stylesheet.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    -->
+    <meta name="generator" content="Nanoc 4.3.4">
+
+    <!-- For all browsers -->
+    <link rel="stylesheet" href="/css/main.css">
+    <meta http-equiv="cleartype" content="on">
+    <!-- start custom head snippets -->
+    <!-- insert favicons. use http://realfavicongenerator.net/ -->
+    <link rel="stylesheet" href="/css/asciidoc-pygments.css">
+</head>
+
+<body  class="layout--single">
+    <div class="masthead">
+        <div class="masthead__inner-wrap">
+            <div class="masthead__menu">
+                <nav id="site-nav" class="greedy-nav">
+                    <button><div class="navicon"></div></button>
+                    <ul class="visible-links">
+                        <li class="masthead__menu-item masthead__menu-item--lg"><a href="/">Learn the Origin</a></li>
+                        <li class="masthead__menu-item"><a href="/categories">Categories</a></li>
+                        <li class="masthead__menu-item"><a href="/tags">Tags</a></li>
+                        <li class="masthead__menu-item"><a href="/all-posts">All posts</a></li>
+                        <!--
+                        <li class="masthead__menu-item"><a href="/year-archive">By year</a></li>
+                        -->
+                        <li class="masthead__menu-item"><a href="/presentations">Presentations</a></li>
+                        <li class="masthead__menu-item"><a href="/conferences">Conferences</a></li>
+                        <li class="masthead__menu-item"><a href="/about">About me</a></li>
+                    </ul>
+                    <ul class="hidden-links hidden"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+<!--  USE Breadcrumbs Helper
+
+    <nav class="breadcrumbs">
+      <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.es/" itemprop="item"><span itemprop="name">Home</span></a>
+              <meta itemprop="position" content="1" />
+            </li>
+            <span class="sep">/</span>
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="http://jorgemoral.esdevexp" itemprop="item"><span itemprop="name">Devexp</span></a>
+              <meta itemprop="position" content="2" />
+            </li>
+            <span class="sep">/</span>
+            <li class="current">Configuring your application, Part 2</li>
+      </ol>
+    </nav>
+-->
+
+    <div id="main" role="main">
+        <div class="sidebar sticky">
+            <div itemscope itemtype="http://schema.org/Person">
+                <div class="author__avatar">
+                    <img src="/images/bio-photo.jpg" class="author__avatar" alt="Jorge Morales">
+                </div>
+                <div class="author__content">
+                    <h3 class="author__name">Jorge Morales</h3>
+                    <p class="author__bio">OpenShift Developer Advocate working for Red Hat.<br/>Drop me a tweet if you want me to blog about a topic</p>
+                </div>
+
+                <div class="author__urls-wrapper">
+                    <button class="btn btn--inverse">Follow</button>
+                    <ul class="author__urls social-icons">
+                        <li><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Madrid, Spain</li>
+                        <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                        <li><a href="https://github.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitHub</a></li>
+                        <li><a href="https://gitlab.com/jorgemoralespou"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> GitLab</a></li>
+                        <li><a href="https://www.linkedin.com/in/jorgemoralespou"><i class="fa fa-fw fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+<article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <div class="page__inner-wrap">
+        <header>
+            <h1 class="page__title" itemprop="headline">Part 1 - From app to OpenShift</h1>
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                6 minutes
+                    Posted:
+                    13/Aug/2015 by
+                        Jorge Morales
+            </p>
+        </header>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is Part 1 of a 2 part series of blogs that will help you bringing your applications into OpenShift.</p>
+</div>
+<div class="paragraph">
+<p>OpenShift 3 allows you to deploy your application to the cloud and the great thing is it doesn’t matter if your cloud is public, private, or even hybrid. Typically, the PaaS platform (OpenShift in this case) will provide a set of predefined runtimes that a developer can use to deploy an application on top of. This developer does not need to worry about the infrastructure, the runtime setup, or the configuration, he/she would just need to focus on their application, and what runtime to use. The PaaS platform will take care of sewing it all together and running it.</p>
+</div>
+<div class="paragraph">
+<p>However, sometimes not all the runtimes are provided by the PaaS platform, or that the usages of these runtimes are not suitable for every application type, and there is a need for the PaaS provider to facilitate these to their users.</p>
+</div>
+<div class="paragraph">
+<p>As a PaaS provider you’ll need to provide users with:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>runtimes (a.k.a platforms)</p>
+</li>
+<li>
+<p>configured usages of the runtimes for applications</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_runtimes">Runtimes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As OpenShift 3 relies on containers, the runtimes will be base images that provide the underlying foundation to deploy an application (provided by the user) on top of. The containers also need to be highly configurable so there is no need to provide a single image for every use case. Instead, a different configuration provided to the image will make the runtime work as desired.</p>
+</div>
+<div class="paragraph">
+<p>OpenShift 3 provides some base images certified and ready to use out of the box:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/s2i_images/nodejs.html">Node.js</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/s2i_images/ruby.html">Ruby</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/s2i_images/perl.html">Perl</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/s2i_images/php.html">PHP</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/s2i_images/python.html">Python</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/xpaas_images/eap.html">JBoss Enterprise Application Platform</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/xpaas_images/a_mq.html">JBoss A-MQ</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/xpaas_images/jws.html">JBoss Web Server</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>OpenShift provides users with the ability to inject/layer/build source code into these images, as they are created for <a href="https://docs.openshift.com/enterprise/3.0/creating_images/s2i.html#overview">S2I (Source-To-Image)</a> purposes.</p>
+</div>
+<div class="paragraph">
+<p>OpenShift 3 also provides some base images with database runtimes that can be used or extended:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/db_images/mysql.html">MySQL</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/db_images/postgresql.html">PostgreSQL</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/enterprise/3.0/using_images/db_images/mongodb.html">MongoDB</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configured_usages_of_the_runtimes">Configured usages of the runtimes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenShift 3 provides a set of predefined runtime use cases, that are user configurable, and allow for the deployment of applications. These predefined runtimes are modeled as <strong>OpenShift templates</strong>.</p>
+</div>
+<div class="paragraph">
+<p>OpenShift 3 provides the following templates that a Developer can use to simplify the build and deployment process for an application with an existing Git source repository:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>JavaEE application running on an EAP server</p>
+</li>
+<li>
+<p>JavaEE application running on an EAP server and using an ephemeral database (PostgreSQL, MySQL, MongoDB)</p>
+</li>
+<li>
+<p>JavaEE application running on an EAP server and using a persistent database (PostgreSQL, MySQL, MongoDB)</p>
+</li>
+<li>
+<p>Web application running on a Tomcat Container</p>
+</li>
+<li>
+<p>Web application running on a Tomcat Container and using an ephemeral database (PostgreSQL, MySQL, MongoDB)</p>
+</li>
+<li>
+<p>Web application running on a Tomcat Container and using a persistent database (PostgreSQL, MySQL, MongoDB)</p>
+</li>
+<li>
+<p>ActiveMQ brokers with ephemeral storage</p>
+</li>
+<li>
+<p>ActiveMQ brokers with persistent storage</p>
+</li>
+<li>
+<p>Ephemeral database (PostgreSQL, MySQL, MongoDB)</p>
+</li>
+<li>
+<p>Persistent database (PostgreSQL, MySQL, MongoDB)</p>
+</li>
+<li>
+<p>Instant apps for Perl, Python, Ruby, PHP, Node.js</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Instant apps are preconfigured example applications including source code that can be forked and altered, providing a quick experience deploying an app in a popular platform.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As you can probably guess, not all possible combinations and capabilities for a runtime or set of runtimes can be provided out of the box, and in many cases, the PaaS provider will have to create more of these for the end user.</p>
+</div>
+<div class="sect2">
+<h3 id="_what_is_a_template">What is a template</h3>
+<div class="paragraph">
+<p>The official OpenShift 3 <a href="https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/templates.html">documentation</a> states:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>A template describes a set of objects that can be parameterized and processed to produce a list of objects for creation by OpenShift. The objects to create can include anything that users have permission to create within a project, for example services, build configurations, and deployment configurations. A template may also define a set of labels to apply to every object defined in the template.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>This means that typically in a template we will have:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A set of resources that will be created as part of "creating/deploying" the template</p>
+</li>
+<li>
+<p>A set of values for the parameters defined in the template</p>
+</li>
+<li>
+<p>A set of labels to describe the generated resources</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A template will be defined in JSON or YAML format, and will be loaded into OpenShift for user instantiation, also known as application creation.</p>
+</div>
+<div class="paragraph">
+<p>The templates can have global visibility scope (visible for every OpenShift project) or project visibility scope (visible only for a specific project).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_benefits_of_using_templates">Benefits of using templates</h3>
+<div class="paragraph">
+<p>A template provides developers with an easy way to create all the necessary OpenShift resources for their application to work. This allows a developer to quickly deploy an application without having to understand all of the internals of the OpenShift 3 platform.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>As a PaaS provider you have better control on what is being created and can make better usage of your resources.</p>
+</li>
+<li>
+<p>As a PaaS provider you can define different Service Level Agreements in templates, defining the amount of host resources (cpu, memory) each and every container can consume.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_predefined_templates_or_deploy_your_application_on_openshift">Predefined templates, or deploy your application on OpenShift</h3>
+<div class="paragraph">
+<p>Typically, the PaaS provider will provide users with a set of predefined templates that will cover all of the usages or typologies/topologies of applications that can be deployed on OpenShift.</p>
+</div>
+<div class="paragraph">
+<p>The set of predefined templates will be accessible through the CLI or through the Web console.</p>
+</div>
+<div class="paragraph">
+<p>When creating your application using one of these templates, the user will typically provide the template with the source for the code of the application and some other configuration items such as the application name, database credentials, etc.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_custom_templates_or_openshiftify_your_application">Custom templates, or OpenShiftify your application</h3>
+<div class="paragraph">
+<p>Another use case is when you have a typology/topology of an application that does not fit into the provided templates and you want to create a template to model it. This will be the topic for the next article, a walkthrough on how to create a template for your application.</p>
+</div>
+</div>
+</div>
+</div>
+    </div
+
+    <footer class="page__meta">
+      <p class="page__taxonomy">
+         <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+         <span itemprop="keywords">
+               <a href="/tags/#openshift" class="page__taxonomy-item" rel="tag">openshift</a><a href="/tags/#origin" class="page__taxonomy-item" rel="tag">origin</a><a href="/tags/#applications" class="page__taxonomy-item" rel="tag">applications</a><a href="/tags/#templates" class="page__taxonomy-item" rel="tag">templates</a>
+         </span>
+      </p>
+
+      <p class="page__taxonomy">
+         <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+         <span itemprop="keywords">
+            <a href="/categories/#devexp" class="page__taxonomy-item" rel="categories">devexp</a>
+         </span>
+      </p>
+
+      <p class="page__date">
+            <strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:  </strong>August 13, 2015</p>
+   </footer>
+
+   <!--
+   <section class="page__share">
+      <h4 class="page__share-title">Share on</h4>
+         <a href="https://twitter.com/intent/tweet?via=UnPOUcoDe&text=Configuring your application, Part 2 http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+         <a href="https://www.facebook.com/sharer/sharer.php?u=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+         <a href="https://plus.google.com/share?url=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+         <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://jorgemoral.es/devexp/configuring-your-app-2/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+   </section>
+
+<nav class="pagination">
+<a href="http://jorgemoral.es/devexp/configuring-your-app-1/" class="pagination--pager" title="Configuring your application, Part 1
+">Previous</a>
+<a href="#" class="pagination--pager disabled">Next</a>
+</nav>
+</div>
+-->
+</article>
+
+    </div>
+
+    <div class="page__footer">
+        <footer>
+            <!-- start custom footer snippets -->
+            <!-- end custom footer snippets -->
+            <div class="page__footer-follow">
+                <ul class="social-icons">
+                    <li><strong>Follow:</strong></li>
+                    <li><a href="https://twitter.com/UnPOUcoDe"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+                    <li><a href="http://jorgemoral.es/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+                </ul>
+            </div>
+            <div class="page__footer-copyright">&copy; 2016 Jorge Morales Pou.</div>
+        </footer>
+    </div>
+    <script src="/js/main.min.js"></script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-81343831-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+
+</html>
+
