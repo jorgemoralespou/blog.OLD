@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 summary     'creates a new blog post'
 description <<desc
 This command creates a new blog post under content/posts/{year}-{month}-{day}-{title}.adoc.
@@ -20,7 +19,7 @@ end
 # title: "Title"
 # kind: article
 # created_at: 2016-10-17 09:00:00 +0000
-# author_name: Jorge Morales
+# author_name: "Jorge Morales"
 # read_time: 10 minutes
 # categories: [devexp]
 # tags: [openshift,origin,applications,templates]
@@ -37,7 +36,7 @@ run do |opts, args, cmd|
 
   # get the name and description parameter or the default
   name = args[0] || "New blog post"
-  author = opts[:author] || "Jorge"
+  author = opts[:author] || "Jorge Morales"
 
   # convert the tags and categories string to and array of trimmed strings
   tags = opts[:tags].split(",").map(&:strip) rescue []

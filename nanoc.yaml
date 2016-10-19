@@ -89,7 +89,9 @@ checks:
     #   exclude_files: ['blog/page']
     exclude_files: []
 
+# Source code in: https://github.com/jorgemoralespou/blog.git
+# Published blog in: https://github.com/jorgemoralespou/jorgemoralespou.github.io
 deploy:
   default:
     kind: git
-    branch: gh-pages
+    branch: master

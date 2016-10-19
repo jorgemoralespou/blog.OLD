@@ -10,6 +10,7 @@ GEM
       colored (~> 1.2)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
+    highline (1.7.8)
     mini_portile2 (2.1.0)
     nanoc (4.3.4)
       cri (~> 2.3)
@@ -28,6 +29,7 @@ GEM
       yajl-ruby (~> 1.2.0)
     rack (2.0.1)
     ref (2.0.0)
+    stringex (2.6.1)
     yajl-ruby (1.2.1)
 
 PLATFORMS
@@ -35,11 +37,13 @@ PLATFORMS
 
 DEPENDENCIES
   adsf
+  highline
   nanoc
   nanoc-asciidoctor
   nanoc-git
   nokogiri
   pygments.rb
+  stringex
 
 BUNDLED WITH
    1.13.3

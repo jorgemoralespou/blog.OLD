@@ -7,4 +7,6 @@ group 'nanoc' do
   gem 'nokogiri'
   gem 'pygments.rb'
   gem 'nanoc-git'
+  gem 'stringex'
+  gem 'highline'
 end
