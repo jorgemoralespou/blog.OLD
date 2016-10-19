@@ -92,4 +92,4 @@ checks:
 deploy:
   default:
     kind: git
-    branch: master
+    branch: gh-pages
