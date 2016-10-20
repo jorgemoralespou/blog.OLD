@@ -1,0 +1,257 @@
+---
+title: Developing locally with OpenShift
+kind: article
+created_at: 2016-10-20 20:39:50 +0100
+author_name: Jorge Morales
+read_time: 12 minutes
+tags: ["origin", "oc-cluster", "development", "devexp"]
+tags: ["devexp"]
+excerpt: In this blog, I'm going to describe what are my requirements when looking for a way to develop locally using OpenShift
+---
+In this blog, I'm going to describe what are my requirements when looking for a way to develop locally using OpenShift, and I'll describe a tool I have created to help me with this workflow.
+
+First of all, I have to say that I'm not only a developer, so maybe the workflow I'm looking for is too complex, so I'm still experimenting to refine not only the workflow but also the tooling. I'll give some comments on what I would like from my ideal tool.
+
+Also, I need to say that this workflow is to work on OpenShift, as a developer, as an evangelist, as a product manager, as a tester, as a customer, as a user and the many roles I have throughout my day.
+
+I'll use oc-cluster as the name of the command to show my needs. Why I used this name? Read to the end and I'll give you an answer and also a reason why the name will eventually change.
+
+First, I want an easy way to start and stop an OpenShift install locally, on my laptop.
+
+[source,bash]
+----
+oc-cluster up
+oc-cluster down
+----
+
+I'm somehow biased by some of the option names used by Vagrant, as I've been a Vagrant user for many years, and still am, and I think some of the command names fits really well to be self descriptive.
+
+One important thing for me is that the cluster I create will survive multiple days, as I will be using it for a while, so I need it to be persistent. That means that if I need a new cluster, I'll have to delete the current one, with:
+
+[source,bash]
+----
+oc-cluster destroy
+----
+
+Another important factor for me as I'm multitasked, is to be able to have different clusters, with different stuff, that I can switch between them at will, so I have used the term *profile* for this, and when starting, stoping and destroying a cluster I can use the profile name.
+
+[source,bash]
+----
+oc-cluster up java
+oc-cluster down
+oc-cluster up demo
+oc-cluster down
+oc-cluster destroy demo
+----
+
+While I can have everything in one single cluster, in different projects, if I end up adding a lot of applications to a cluster, the amount of resources I would use, and the time it would take to start would be high, so I'd rather split my clusters into different responsibilities. I can create a cluster for Java development, configure it with a nexus artifact repository manager, and have templates configured to always use nexus, or have a buildOverrides for that. If I started a demo cluster, I would not be interfered by the work I do as a Java developer.
+
+Next, as there can be multiple profiles, I need a way to know what profiles I have created, so I can pass the appropriate name to the *up* command:
+
+[source,bash]
+----
+oc-cluster list
+----
+
+Also, it's very important to know if I already have a cluster up and running and which cluster is it:
+
+[source,bash]
+----
+oc-cluster status
+----
+
+So far, this is a basic workflow to start and stop, create and destroy, list and status the clusters I have.
+
+One important note is that since the create and start command is the same, the command needs to make sure that the first time is invoked will create the cluster, but the subsequent calls will just bring it up, and not do any creational steps.
+
+Now, some of the needs that as a developer on OpenShift I have are to work with persistence volumes, so there are helper commands that helps on that goal.
+
+[source,bash]
+----
+oc-cluster create-volume volumeName [size|10Gi] [path|$HOME/.oc/profiles/{profile}/volumes/{volumeName}]
+oc-cluster create-shared-volume project/volumeName [size|10Gi] [path|$HOME/.oc/volumes/{volumeName}]
+----
+
+The first command will create an OpenShift PV, that is only available to the profile in use, that means that whenever I destroy the cluster represented by that profile, all the date stored in that volume will be removed as well. Like every developer, I expect that all the defaults are good enough for me to use, so I limit the amount of required params to just the name. This could also be reduced to use random names, and it's something I'll think about.
+
+The second command, bring the difference that provides a shared storage between clusters. This way I can mount the same volume on multiple clusters. The main use case I have so far is to be used by persistent applications that I use in many clusters and that are used as infrastructure type of services. A good example for this is nexus artifact repository manager, where I want every dependency that I have already pulled down to be available to every cluster I use.
+
+Also, talking about OpenShift, I will probably want to get into the OpenShift runner. What I mean with the OpenShift runner is the place where OpenShift is actually running, whether this is a VM or a docker container, and I want to do this in a consistent way and in a way that I will understand. For this I use:
+
+[source,bash]
+----
+oc-cluster ssh
+----
+
+Now, I'll talk about some of the problems that my clusters could suffer and some solutions to those:
+
+* Adding functionality to the tool.
+* Bootstrapping users
+* Bootstrapping the cluster
+** Configuration bootstrap
+** Deployments bootstrap
+* Reproducibility
+* Packaging/Transport
+* Using proxies
+
+I'll try to dive into all these topics, one by one.
+
+== Adding functionality to the tool
+Sometimes I find that what I can do, or what I want to do, is not covered by the tool, and I understand that also my use case can be quite different from other's use cases. To solve this, the tool needs to support the ability to provide plugins that will help on different tasks. These tasks can be:
+
+* Bootstrapping tasks. Adding stuff to the cluster. Whether it's configuration or deployments.
+* New commands. Having commands that extend how the tool works, and that are not considered bootstrapping but more management.
+
+== Bootstrapping users
+Users is a key part of local development environments, but it's more important when you want to use the local development environment for demos, as you'll probably want to have different users, with different roles and belonging to different projects, so you can show things like application promotions, or the difference way of working of a developer compared to an administrator.
+For me, one of the most important parts, now that it is possible, is to have my regular user act as a *sudoer*, so I can just execute admin commands if I need to without needing to change user.
+
+This can be done by adding your user the following:
+
+[source,bash]
+----
+oc adm policy add-cluster-role-to-user sudoer developer
+----
+
+NOTE: My user is developer.
+
+Also, I will probably need to log in as administrator to the web interface, so I need a full user with cluster-admin role.
+
+[source,bash]
+----
+oc adm policy add-cluster-role-to-user cluster-admin admin
+----
+
+NOTE: This action needs to be done as a system:admin, but the tooling we've built take care of this.
+
+Additionally I want to be able to create/delete users, and force them roles, so I can bootstrap a demo cluster for things like application promotions. I need some simple commands that will be able to bootstrap whatever is needed for me, no matter what underlying identity provider is used.
+
+[source,bash]
+----
+oc-cluster create-user {username} {role} [{project}]
+oc-cluster remove-user {username}
+oc-cluster login {username}
+----
+
+You'll probably be wondering why there's a login and logout commands. This are needed as usually one can have multiple clusters created, with the same configuration, but sadly every cluster you create will have it's own self signed certificates for authenticating. There's a need to set in the local oc context the proper cluster and certificates, to avoid errors. This is handled by the *login* command. As this is a *local* environment, security is not much of a concern, and passwords can be generalized.
+
+== Bootstrapping the cluster
+Following with the things that need to be done are the need to provide some bootstrapping for the clusters, as there will be things I will need always to be provisioned/available in certain clusters.
+For this, I think that it's important to have 2 possibilities, when creating clusters. First of all, is to blueprinting a cluster, so that every time you create a cluster with a certain blueprint, all the bootstrapping will be provided. And additionally, there needs to be a way to bootstrap one-shot clusters, for things you don't want so frequently.
+
+To these, you have blueprints, that will be executed on cluster first bootstrap:
+
+[source,bash]
+----
+oc-cluster up {profile_name} {blueprint}
+oc-cluster up demo pipelines-demo
+----
+
+Or you can do the provisioning afterwards, as a one-shot, as this will be executed in the same way:
+
+[source,bash]
+----
+oc-cluster provision {blueprint}
+----
+
+How do you know what blueprints you have?
+
+[source,bash]
+----
+oc-cluster blueprints-list
+----
+
+All blueprints can be made composable, so there can be a repository with single actions (enable-pipelines, add-user, add-project, deploy-app) or a composed action (pipelines-demo,msa-demo,...)
+
+=== Configuration bootstrap
+Configuration bootstrapping is the one that requires changes in master or node config's file or any other configuration file and that probably will require a restart of the OpenShift process.
+
+=== Deployments bootstrap
+Deployments bootstrap does not require to restart any process as it will only interact with OpenShift deployable resources, like projects, users, services, routes, deployments, and off course, pulling down all the required images.
+
+== Reproducibility
+One of the most important things when developing is that you know that at some point we can screw our environment, and will need to start over. There's times where we know the action we're going to do can be problematic, and we could probably make a safe point, so if we do something wrong, we can easily revert back the state. This is easy if you just save the configuration to be able to revert back.
+
+[source,bash]
+----
+oc-cluster snapshot-save
+----
+
+In the event of a problem, you'll might want to go back to a safe configuration:
+
+[source,bash]
+----
+oc-cluster snapshot-list
+oc-cluster snapshot-restore {snapshot-id}
+----
+
+NOTE: For simplicity, snapshots are made only on running clusters, but can be restored if there's no running cluster or the cluster running is the one for the snapshot.
+
+This concept of making save points can be greatly extended, and also is prone to errors if when you restore an environment some images are no longer available. This problem is mostly for self built images.
+One extension to this concept is having the ability to provide local snapshots, that will be removed if the cluster is removed, and global snapshots, that can be used to recreate a cluster at any moment, and could be made transportable. And this leads us to our next topic.
+
+== Packaging/Transport
+Packaging of a cluster is a concept very important for when doing workshops. I do want 40 people in a room to have the exact same thing so I can teach them a lesson and they can experiment themselves. For this, there's no easy solution, but as long as they have the tooling, a full cluster can be fully automated for a workshop. How?
+
+Providing a download link that will do the installation/bootstrapping of all the needed things, a-la installer. So really there's no transport, but there's a way to bootstrap the same package for everyone.
+
+This, that sounds really cool and easy, it's the most complex of all the tasks, and it is mainly because of the variety of operating systems existing out there. If I just had to focus on mac and linux, it could be very simple, but having to also support windows users it becomes an impossible. At least for me. Hence this requirement is not yet fulfilled.
+
+[source,bash]
+----
+oc-cluster install {URL}
+----
+
+== Using proxies
+And last but not least, the support for proxies. This one, that seems easy, is also one of the most complex topics, and this is mostly because the support that OpenShift provides for proxies is not transportable. I'll explain myself better. As a developer, I might need to work some time at the office, where I have a proxy to access the internet. At home I might not need the proxy. This scenario is not easily solved in OpenShift, where you'd need to play with ENV variables being set/unset for every build/deployment every time you move in or out.
+
+My idea would be something like this:
+
+[source,bash]
+----
+oc-cluster enable-proxy {proxy}
+oc-cluster disable-proxy
+----
+
+But as easy as it looks, I haven't figured out yet if this is possible, and how.
+
+== Existing tooling
+As I said at the beginning, I'm using a command called *oc-cluster* and it's because it uses internally OpenShift's *oc* client tool and the *cluster* option. I found this *oc cluster* a good way to bootstrap and use a cluster locally on my *mac* but even on *linux* as it can use Docker native. If you decide to use *docker-machine* my command will not work. There's many advantages to using docker locally, but there's also some disadvantages. Hopefully the disadvantages can be easily solved but the advantages can not be easily taken with other approaches, as when using *docker-machine*.
+
+Advantages I see:
+
+* You can use your local file system for persistent volumes.
+* You don't have a virtualization layer.
+* Image are directly available to all the clusters once pulled.
+* You can share volumes between different clusters, even if they are not running.
+
+Disadvantages I see:
+
+* Packaging and transportation with VM could be made easy, but then, there's many virtualization out there to make it work on all, or the most important.
+* Removal of built images is easier, as the images are built into the VM. Deleting the VM, deletes all built images. This can also be solved with the tooling, as there is a feature coming that will provide labels to the images created, so every cluster will label their images. Removing the cluster, will remove their images.
+
+Probably there's more, but these are the ones I can think of right now.
+
+== Options
+There are some options out there, some of them more portable, but also, less flexible. As I'm developing this tool just for me, I focus on something that will work for me, but as I think that most of what works for me could be made work for anyone, I'm here sharing these thoughts with you.
+
+Options:
+
+* *CDK, ADB*: Using Virtualization through Vagrant and using vagrant plugins. It's portable but very heavy weight and outdated.
+* *OpenShift.org All-in-one*: Same as before. Although it's up to date and it doesn't use plugins it's heavyweight. Even I'm the author of it, I know it has many limitations, and I'm just limiting the use of it to those use cases I can not still cover, like doing workshops with Windows users :-(
+* *Minishift*: It uses lightweight virtualization, but still don't provide many of the additional features I need. I would used it and extend it, but since it's written in go, I can not contribute to it. I find this a great option, probably the best. Although I don't like the name of the commands used, I think will be the way to move forward, and also it is based on *minikube*, which seems to have adoption on *Kubernetes* community, which is also great. The maintainer is a great guy.
+* *Plain oc cluster*: This provides a great foundation, but in no way is something usable per se for developers. Just having a default that makes configuration ephemeral is something that for a developer is not interesting. But as the tool is a great cluster bootstrapper, I use it, and try to ask for features that will make developer's use case through our tool more interesting and easy. Also the maintainer is a great guy.
+
+== Final comments
+I love OpenShift, I love Kubernetes. I think it is a great platform to run your containers at scale, but I still see that for developers there's a steep learning and usability curve. I hope that one day, Java developers (well really any developer) will deploy locally on Kubernetes/OpenShift and not plain docker. Also that they keep developing in plain Java, using their IDEs, building their artifacts or images however they want (s2i, docker build on OpenShift or maven and docker build locally), but that the proces it's easy for them to use.
+I think that for them to adopt a platform like this, the development process needs to be:
+
+* Easy. Not many additional steps to use the local platform.
+* Fast. It needs to be as fast as without using the local platform.
+* Integrated. They can use the same tools to work on their local platform.
+
+This is one of the required steps to have an environment (local platform) to use. Following should be to be easy to collaborate between your local and remote environments. But that, should be the topic of another post.
+
+As always, if you want to comment, please use tweeter.
+
+Download the *link::https://github.com/openshift-evangelists/oc-cluster-wrapper[oc-cluster]*

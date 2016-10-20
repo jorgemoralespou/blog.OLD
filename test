@@ -1,0 +1,2 @@
+bundle exec nanoc
+bundle exec nanoc view

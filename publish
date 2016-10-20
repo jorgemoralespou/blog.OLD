@@ -1,2 +1,3 @@
 bundle exec nanoc
+cp CNAME output/
 bundle exec nanoc deploy
