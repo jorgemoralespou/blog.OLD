@@ -254,4 +254,4 @@ This is one of the required steps to have an environment (local platform) to use
 
 As always, if you want to comment, please use tweeter.
 
-Download the *link::https://github.com/openshift-evangelists/oc-cluster-wrapper[oc-cluster]*
+Download the *link:https://github.com/openshift-evangelists/oc-cluster-wrapper[oc-cluster]*
