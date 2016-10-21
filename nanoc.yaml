@@ -24,6 +24,9 @@ index_filenames: [ 'index.html' ]
 # before and after the last site compilation.
 enable_output_diff: false
 
+#
+base_url: http://jorgemoral.es
+
 prune:
   # Whether to automatically remove files not managed by Nanoc from the output
   # directory.
