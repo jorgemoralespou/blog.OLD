@@ -1,0 +1,65 @@
+---
+title: Developing locally with OpenShift - State of the art
+kind: article
+created_at: 2017-04-05 22:00:00 +0100
+author_name: Jorge Morales
+read_time: 12 minutes
+tags: [openshift,origin,development,local,devexp,oc-cluster,allinone,minishift,cdk]
+categories: [devexp]
+excerpt: This is the first article of a series of blogs describing the state of the art related to local development using OpenShift as Container Application Platform
+---
+OpenShift v3 launched a year and a half ago and during this time we’ve been looking at different ways to run a local OpenShift development environment on the developer’s laptop. In this series of articles I will be introducing the options we have been providing and most importantly, I will describe the evolution in our approach..
+
+But before digging into any particular solution, we need to set the ground rules of what a local development environment is and why it is important.
+
+OpenShift is a Cloud Container Application Platform that will usually be installed on a datacenter for enterprise grade usage. This means that developers will have access to a set of nodes that will be acting as development environment for them. As you probably know, OpenShift runs applications packaged as Docker containers, so all that is required to use the platform is the Docker images to run. How you get to these images is not relevant for OpenShift, although it provides some mechanism out of the box that makes your life easier, what is really relevant is that your Docker image is available to the platform.
+
+As a developer, how can you make this happen? These are some options.
+
+* Provide source code to the platform and let the platform build it. There are 2 options:
+** Provide your application’s source code and let OpenShift build the Docker image using s2i.
+** Provide a Dockerfile and let OpenShift build the Docker image using a Docker build for you.
+* Provide just your application binary to a special image that knows how to run it. This can be done in different ways but most likely:
+** Provide your application binary to OpenShift and let OpenShift build a Docker image with the binary on top of an existing base image.
+** Provide your application binary as a parameter to your deployment that will use a generic Docker image and will pull it down at startup time. This goes against the model that the Docker image should container everything it needs, but still, is an option.
+* Create a Docker image and push it to the platform. There is multiple ways to create this Docker image, build it locally or in a CI server running internally or externally to openshift.
+* Pull down into the platform an existing Docker image. The only difference is that in this case, you will not be building the image.
+
+But let’s step back a little. Since we are developers, it is quite important to us how we create those Docker images. The truth is that, as developers, we will be building our application and trying it out on the environment several times during the development cycle. While doing this using a clustered platform, remote to our laptops, is probably the easiest in terms of convenience, but the truth is that for most developers, like me, this will not be enough. I will probably be building the application several times a day, sometimes tens or even hundreds of times. I will probably like to debug the running application. I will probably want to do many other things that can be summarized in:
+
+“I want to develop applications for OpenShift as fast as I can develop an application running on my local development box”
+
+That probably means that
+
+* I need to be able to have the OpenShift environment as close and available to me as possible
+* I want to have a streamlined process for developing against this local OpenShift environment.
+
+While you may not agree with what I just said, I can provide some good reasoning on why I would like this kind of development environment. Of course there’s always some drawbacks, but I think they can be overcome. Let’s start with the pros on why it is good to have an OpenShift local.
+
+* *Independence of location*. I no longer need to be attached to the company’s network to be able to work.
+* *Independence of connectivity*. I will no longer require an internet connection to work. This is not always true, but is true as long as you have your dependencies and base images locally available. And this will work especially well if you integrate your image repository or source code repository into the local OpenShift. For example, this can be accomplished with Gitlab.
+* *Customization of the experience*. I can customize the build experience so that it looks as close as possible to developing without OpenShift.
+* *Faster development cycle*. I can iterate faster on my development, code, test, deploy, code, test, deploy, debug,...
+
+And now, the few cons I can think of:
+
+* *Solutions for multiple platforms*. Developers might use Windows, Linux or Mac, so the local development environment needs to run on these Operating Systems.
+* *Developer box resource requirements*. Having a local OpenShift install means that the Developer Workstation needs to have enough resources to run it.
+* *Administration rights to install the tools*. Sometimes we have found that developer’s workstations are standardized and they are not allowed to install additional software.
+
+Of these cons, the first one is Red Hat’s responsibility, as we should provide a solution for local development targeting these different environments. The others are something that Enterprises will need to think about when adopting new technology. As we are already in 2017 we need to understand that developers will not be productive using low resources workstations, it’s penny-wise pound foolish. I hope that at this point in time, enterprises understand that specs for developer workstations should no longer be such a big issue.
+
+There’s always alternatives to running a local OpenShift instance on the developer’s box, but I can not advocate for any solution that goes against the principles of test your production code as soon as possible, which for me, that means on my workstation.
+
+Most importantly,  there is multiple ways to bring your code into an application and that application to run it in your local OpenShift developer instance:
+
+* Building your application and rsync the compiled code into a running container.
+* Rsync source code directly into a container when using non-compiled languages.
+* Using a maven plugin to build the images on the host and push them into you local OpenShift environment.
+* Many others...
+
+Any option you take, should mean that at the end you, as a developer, can test your application running in an OpenShift environment. If on the contrary, you build and verify/test your application in a specific way that will be different as how the application will be run in production, there’s many chances that issues might occur. This should be avoided as much as possible if you want to fully embrace DevOps and agility.
+
+Now that I have presented the importance of having a local OpenShift environment available in your workstation, I’ll present the evolution of the “local OpenShift development environment” since we started to the present time, when I can say we have finally a really good solution that only can get better.
+
+In the next blogs I’ll talk about the Origin all-on-one VM (and the Container Development Kit/CDK) using virtualization and Vagrant. Then I’ll move into a pure docker solution with “oc cluster up” and I’ll end up with minishift, a lightweight virtualized option.

@@ -2,4 +2,4 @@
 title: Conferences
 ---
 
-<h2>Conferences</h2>
+== Conferences

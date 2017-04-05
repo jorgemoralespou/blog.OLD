@@ -1,0 +1,10 @@
+---
+title: Developing locally with OpenShift - Bringing it all together
+kind: draft
+created_at: 2017-04-05 22:00:00 +0100
+author_name: Jorge Morales
+read_time: 12 minutes
+tags: [openshift,origin,development,local,devexp,oc-cluster]
+categories: [devexp]
+excerpt:
+---

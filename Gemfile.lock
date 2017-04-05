@@ -5,32 +5,33 @@ GEM
       rack (>= 1.0.0)
     asciidoctor (1.5.5)
     colored (1.2)
-    concurrent-ruby (1.0.2)
-    cri (2.7.0)
+    concurrent-ruby (1.0.5)
+    cri (2.8.0)
       colored (~> 1.2)
+    ddplugin (1.0.1)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     highline (1.7.8)
     mini_portile2 (2.1.0)
-    nanoc (4.3.4)
+    multi_json (1.12.1)
+    nanoc (4.7.5)
       cri (~> 2.3)
+      ddplugin (~> 1.0)
       hamster (~> 3.0)
       ref (~> 2.0)
     nanoc-asciidoctor (1.0.2)
       asciidoctor (> 0.1, < 2.0)
       nanoc (>= 3.6.7, < 5.0.0)
-    nanoc-git (1.0.1)
-      nanoc (>= 3.7.0, < 5.0.0)
-    nokogiri (1.6.8.1)
+    nanoc-git (2.0.0)
+      nanoc (~> 4.5)
+    nokogiri (1.7.1)
       mini_portile2 (~> 2.1.0)
-    posix-spawn (0.3.11)
-    pygments.rb (0.6.3)
-      posix-spawn (~> 0.3.6)
-      yajl-ruby (~> 1.2.0)
+    pygments.rb (1.1.2)
+      multi_json (>= 1.0.0)
     rack (2.0.1)
     ref (2.0.0)
-    stringex (2.6.1)
-    yajl-ruby (1.2.1)
+    stringex (2.7.1)
+    yajl-ruby (1.2.2)
 
 PLATFORMS
   ruby
@@ -44,6 +45,7 @@ DEPENDENCIES
   nokogiri
   pygments.rb
   stringex
+  yajl-ruby (= 1.2.2)
 
 BUNDLED WITH
-   1.13.3
+   1.14.6

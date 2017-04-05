@@ -4,8 +4,8 @@ kind: article
 created_at: 2016-10-20 20:39:50 +0100
 author_name: Jorge Morales
 read_time: 12 minutes
-tags: ["origin", "oc-cluster", "development", "devexp"]
-tags: ["devexp"]
+tags: [openshift,origin,development,local,devexp,oc-cluster]
+categories: [devexp]
 excerpt: In this blog, I'm going to describe what are my requirements when looking for a way to develop locally using OpenShift
 ---
 In this blog, I'm going to describe what are my requirements when looking for a way to develop locally using OpenShift, and I'll describe a tool I have created to help me with this workflow.

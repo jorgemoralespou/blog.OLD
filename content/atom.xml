@@ -1,0 +1,1 @@
+<%= atom_feed :limit => 15, :title => 'Learn the Origin', :author_name => "Jorge Morales", :base_url => 'http://jorgemoral.es' %>
