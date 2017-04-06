@@ -3,3 +3,18 @@ title: About
 ---
 
 == About me
+My name is *Jorge Morales*, and I work for *Red Hat* as *OpenShift Field Product Manager and Developer Advocate*.
+
+You can probably not guess that *I'm spanish* from my accent, but probably from how I write you've already realized that either I'm not native speaker/writer or I failed on grammar at school. Well, it's the first option ;-)
+
+I've been on the IT industry for almost 20 years, and in all these years I've learnt a lot of things, but the most important is that you need to stimulate knowledge sharing, as that's how probably all of us have learnt more than 80% of what we know, by reading other's blogs, documents and opinions.
+
+So this is basically what I do here. Share with you some of my thoughts, some of my knowledge and some of my experience.
+
+I hope you like it, and of course, you're free to read me or not, but if you do, please let me know what you're interested in, from what I know, and I'll try to make your life easier. That's one of the things that makes me happy. And I like being happy.
+
+There's some links to places where you can get to know me more on the left, so click only if you're really interested. Else, spend you're time in something more useful.
+
+Life's too short to waste it with boring things ;-)
+
+Cheer up!!! It's another great day.

@@ -3,7 +3,7 @@ title: Developing locally with OpenShift - State of the art
 kind: article
 created_at: 2017-04-05 22:00:00 +0100
 author_name: Jorge Morales
-read_time: 12 minutes
+read_time: 5 minutes
 tags: [openshift,origin,development,local,devexp,oc-cluster,allinone,minishift,cdk]
 categories: [devexp]
 excerpt: This is the first article of a series of blogs describing the state of the art related to local development using OpenShift as Container Application Platform

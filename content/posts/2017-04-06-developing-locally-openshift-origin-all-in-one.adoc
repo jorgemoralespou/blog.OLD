@@ -1,11 +1,30 @@
 ---
-title: Developing locally with OpenShift - Where all began
-kind: draft
-created_at: 2017-04-05 22:00:00 +0100
+title: Developing locally with OpenShift - Origin all in one. Where we started
+kind: article
+created_at: 2017-04-06 12:00:00 +0100
 author_name: Jorge Morales
-read_time: 12 minutes
-tags: [openshift,origin,development,local,devexp,oc-cluster]
+read_time: 4 minutes
+tags: [openshift,origin,development,local,devexp,allinone,cdk]
 categories: [devexp]
-excerpt: Test
+excerpt: In part 2 of this series of articles we will explore the first local development environment that existed for Openshift Origin and OpenShift 3.
 ---
-Test
+At the time OpenShift started, we realized that having a local development environment was important to make iterative development work more agile. Back then, the requirements that we had for a local development environment were pretty clear:
+
+* It needs to work on linux, mac and windows
+* It needs to be easy to run
+* It needs to be easily disposable
+* Resources used need to be adjustable
+
+There was an existing technology that was meeting all these requirements, Vagrant by Hashicorp. Vagrant is a tool that allows you to start a VM, from a template, and then provision/bootstrap the VM on first boot. Then you could start and stop that VM for as many times as you want/need before you discard it. This technology provided us a way to give a base VM image, based out of Centos or RHEL, that was on first boot bootstrapped to contain a full OpenShift environment.
+
+The OpenShift evangelist team started this work and created what we called the “*Origin all-in-one*” which bootstrapped you an OpenShift Origin all-in-one node with additional content. This effort also started based on the necessity of the team to provide a way for developers to have a VM they could take home in order to learn OpenShift.
+
+The effort lead to an official variant, called *CDK (Container Development Kit)* and supported by our Red Hat Developers Tools, that was based on Red Hat Enterprise Linux and installed the Enterprise version of OpenShift, now called OpenShift Container Platform. It provides mostly the same capabilities as the all-in-one, but the most important fact for this variant is that Red Hat supports it. You just need to subscribe the VM (free subscription for developers) and you’ll have access to our Enterprise product.
+
+The downsides to using Vagrant is that you need to use a full Operating System VM that required an initial download of some GBs of data prior to being able to start working. Also it requires a considerable amount of resources not always easily available in the developer’s workstations or laptops.
+
+Relying on Vagrant seemed the right approach at the time, and in the case of CDK, Red Hat invested in having a team of developers working upstream on some of the plugins used. The truth is that after some time, Vagrant seems more an abandoned project where every release breaks a feature and introduces incompatibilities with some of the versions of the hypervisors, e.g. VirtualBox which makes it complicated for the users to have it properly installed and functional.
+
+I’m not going to explain how this approach works. If you’re interested you can just look at link:https://github.com/openshift-evangelists/vagrant-origin/[our docs].
+
+Even though we could admit that the Origin all-in-one VM has been very successful, it has become less and less the defacto way of running a local OpenShift instance, and it will no longer be maintained, as we have link:https://blog.openshift.com/goodbye-openshift-all-in-one-vm-hello-minishift/[announced]. But don’t be afraid, that doesn’t mean there will be no solution. In the following posts I’ll be talking about more options, so stay tuned!
