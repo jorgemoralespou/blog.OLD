@@ -10,5 +10,5 @@ group 'nanoc' do
   gem 'nanoc-git'
   gem 'stringex'
   gem 'highline'
-  
+  gem 'builder'
 end

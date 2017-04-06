@@ -1,42 +1,53 @@
 #!/usr/bin/env ruby
 
+# A few helpful tips about the Rules file:
+#
+# * The string given to #compile and #route are matching patterns for
+#   identifiers--not for paths. Therefore, you can’t match on extension.
+#
+# * The order of rules is important: for each item, only the first matching
+#   rule is applied.
+#
+# * Item identifiers start and end with a slash (e.g. “/about/” for the file
+#   “content/about.html”). To select all children, grandchildren, … of an
+#   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
+#   because “*” matches zero or more characters.
+
 require 'nanoc-asciidoctor'
 
+# Process every html file as default
 compile '/**/*.html' do
   filter :erb
   layout '/default.*'
 end
 
+# Process all blogposts as post layout converting adoc to rendered html
 compile '/posts/*.adoc' do
   filter :colorize_syntax, default_colorizer: :pygmentsrb
   filter :asciidoctor
   layout '/post.*'
 end
 
-compile '/posts/*/feed/' do
-  filter :erb
-end
-
+# Process all blogposts as default layout converting adoc to rendered html
 compile '/**/*.adoc' do
   filter :colorize_syntax, default_colorizer: :pygmentsrb
   filter :asciidoctor
   layout '/default.*'
 end
 
-
-compile '/**/*' do
-  write item.identifier.to_s
+# Process feed
+compile '/atom.xml' do
+  filter :erb
+  write '/atom.xml'
 end
 
+# Move all the blogs to an appropriate folder and rename to index.html
 route '/posts/*' do
   y,m,d,slug = /([0-9]+)\-([0-9]+)\-([0-9]+)\-([^\/]+)/.match(@item.identifier.without_ext).captures
   "/#{y}/#{m}/#{slug}/index.html"
 end
 
-route '/posts/*/feed/' do
-  'atom.xml'
-end
-
+# Rename html and adoc files to index.html
 route '/**/*.{html,adoc}' do
   if item.identifier =~ '/index.*'
     '/index.html'
@@ -44,5 +55,9 @@ route '/**/*.{html,adoc}' do
     item.identifier.without_ext + '/index.html'
   end
 end
+
+# For all the rest, just passthrough
+passthrough '/{css,fonts,images,js}/*'
+passthrough '/posts/images/**/*'
 
 layout '/**/*', :erb
