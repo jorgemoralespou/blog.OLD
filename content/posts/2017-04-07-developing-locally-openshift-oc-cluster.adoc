@@ -1,10 +1,115 @@
 ---
-title: Developing locally with OpenShift - The fastest way to get a local cluster
+title: Developing locally with OpenShift - “oc cluster up”, the fastest way to get a local cluster
 kind: draft
-created_at: 2017-04-05 22:00:00 +0100
+created_at: 2017-04-07 12:00:00 +0100
 author_name: Jorge Morales
-read_time: 12 minutes
+read_time: 10 minutes
 tags: [openshift,origin,development,local,devexp,oc-cluster]
 categories: [devexp]
-excerpt:
+excerpt: In this 3rd blog in the series, we're exploring what is the fastest way to stand up an OpenShift cluster for development, and I'll introduce you to a tool that I've created for experimentation on additional use cases
 ---
+Some time after we launched, we realized how easy it was to run OpenShift itself as a Docker container, as that’s one of the possible ways to install and run OpenShift. Our lead architect, link:https://github.com/smarterclayton/[Clayton Coleman], realized that since every developer will probably have the “oc” (OpenShift client) client tool available on their machines, it could be very easy to add some behaviour to that client to bootstrap a local OpenShift instance. This is how he came with the command cluster and the options up and down.
+
+*“oc cluster up”* will start an openshift all-in-one Docker container on your workstation and it will do some bootstrapping to make it usable. With the command comes many switches so that the behaviour can be customized.
+
+*“oc cluster down”* will stop that container and remove any configuration used by it.
+
+A subsequent start of a cluster, again with “oc cluster up” will bring up a fresh new cluster. This means that the cluster that you have started is not persisted by default, unless one uses the switch “--keep-config” that will preserve the configuration upon restarts.
+
+How does “oc cluster” works? It runs an origin (or ocp) Docker container natively and then it does some bootstrapping to provide some initial configuration. Wait? Did I say a Docker container natively? Yes. This means that for Windows and Mac users you’ll need to use either Docker for Windows or Docker for Mac respectively. Docker for Windows and Docker for Mac uses lightweight virtualization (hyper-V and xhyve respectively) and start a Boot-2-Docker VM, that is very small in size (around 35 MB).
+
+== How to get started
+Download the oc client from link:https://github.com/openshift/origin/releases[origin releases] (lookup for the latest stable)
+
+image::/posts/images/developing_locally_openshift/origin_releases.png[Origin releases]
+
+Next, start the cluster:
+
+[source,bash]
+----
+oc cluster up
+----
+
+image::/posts/images/developing_locally_openshift/insecure_registry_error.png[Insecure registry error]
+
+You’ll get a warning about the registry. Just add the registry to the list of insecure registries of your Docker installation.
+
+image::/posts/images/developing_locally_openshift/add_registry.png[Add registry]
+
+At this point you have a fully functional openshift cluster up and running and available to you. The OpenShift console address is displayed in the output messages, but can also be queried by issuing the following command: at “oc whoami --show-server”. On the startup log there will also be user related information.
+
+image::/posts/images/developing_locally_openshift/cluster_started.png[Add registry]
+
+When you’re done working, just do:
+
+[source,bash]
+----
+oc cluster down
+----
+
+There’s a lot of command line switches to customize the cluster behavior. Starting a cluster for a different origin version or configuring proxies for your cluster are some of the things that can be easily configured.
+
+== Evolution
+“oc cluster” started as a way for OpenShift engineers to have a cluster up to test their work and soon became the easier way to start a cluster. It was first introduced in 1.3 and it has been adding some features on every release, although just the minimal required features for the intended goal. OpenShift version 1.4/3.4 introduced the ability to bootstrap a proxy and some other behavioral changes. OpenShift 1.5/3.5 will introduce Persistent Volumes, so anytime a cluster is bootstrapped, 100 PV will be created and available for the developer to use.
+There is a lot of link:https://github.com/openshift/origin/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20in%3Atitle%20%22oc%20cluster%22%20[work going] into the tool.
+Although many engineers have contributed to this tool, most of the work has been done by link:https://github.com/csrwng/[Cesar Wong]. So my most sincere kudos to Cesar for his amazing work.
+
+== Is it enough?
+Let’s start by saying that I love “oc cluster” as it gives an easy way to bootstrap a cluster based of a Docker container. This is the fastest way to get a cluster up and running. It only requires you to have the oc client, which if you use OpenShift at all you will already have it. And it’s easy to learn. You just need to remember 2 commands “oc cluster up” and “oc cluster down”.
+On the contrary, I have to say that the default behavior does not make developing applications for that local OpenShift environment agile, as you’ll most likely not use the default behavior and will need to always provide command line switches.
+
+The goal of this tool is not to provide a local, reusable, development environment, for those that develop applications that will run on OpenShift. It just provides a fast way to have a cluster available. In many cases, this will be sufficient, but not for me, and what I’m looking for as developer of applications for OpenShift.
+
+The workflow I look for as a developer of applications for Openshift should look like:
+
+* Start an env
+* Work on it
+* Stop an env
+* Start another env
+* Bootstrap it differently for that project
+* Stop that env
+* Start, develop, stop
+* Destroy a no longer needed env.
+
+This has been the main motivation for me to start a side project, a bash script that wraps “oc cluster” and gives me the workflow I’m looking for. The script is named “oc-cluster” and is link:https://github.com/openshift-evangelists/oc-cluster-wrapper[available on GitHub].
+
+== “oc-cluster” wrapper: Gaining experience with developers.
+
+In the process of creating this tool I have done many experimentation on what would be the common bootstrapping that I would require so I have provided a mechanism to configure anything else that I don’t consider basic in an easy way than what is provided out of the box. There is a plugin mechanism that allows all these add ons to be installed on demand and they can be easily shared between different people.
+
+The mechanics are the same as the base “oc cluster”, but it provides a default additional parameter which is the name of the cluster to start. This allows the developer to have multiple clusters created and start/stop the one with the work/add ons they want.
+
+[source,bash]
+----
+oc-cluster up [PROFILE]
+----
+
+image::/posts/images/developing_locally_openshift/oc-cluster_up.png[oc-cluster up]
+
+[source,bash]
+----
+oc-cluster stop
+----
+
+image::/posts/images/developing_locally_openshift/oc-cluster_down.png[oc-cluster down]
+
+This is all you need to know, but as I have introduced the concept of profiles, you can then list the available clusters to decide which one you want to start in case you don’t remember the name.
+
+image::/posts/images/developing_locally_openshift/oc-cluster_list.png[oc-cluster list]
+
+Also, as the clusters are now long lived, you will be able to completely delete the cluster if you’re not going to work with it any more.
+
+image::/posts/images/developing_locally_openshift/oc-cluster_destroy.png[oc-cluster destroy]
+
+The tool has a lot of features targeting make developing on openshift easy, so if you want more information in how this tool works and all the capabilities it has, I recommend you to read the link:https://github.com/openshift-evangelists/oc-cluster-wrapper/blob/master/README.adoc[README.adoc in GitHub].
+
+== Conclusions
+“oc cluster” it’s an awesome tool to get a cluster up and running, but it really don’t fulfill all my expectations for using it as my local development environment for a day to day development tool. That is the reason has has driven me to create a tool on top.
+
+The biggest advantage of this tool that created on top is that it totally adjusts to my workflow and expectations, as it is developed by me ;-), and it’s developed in my free time. Windows is not supported as bash does not run there natively.
+There’s an alternative to this script, written by link:https://github.com/GrahamDumpleton[Graham Dumpleton], written in Python, which supports Windows as well as MacOS X and Linux, called link:https://github.com/getwarped/powershift-cluster[Powershift].
+
+This side project has been mainly developed to make my daily life easier, but by sharing it, I’ve been collecting a big understanding on what users would expect when working with OpenShift locally, either for development or for any other purpose, like demos or even evangelism.
+All this feedback is being constantly shared with the people working on “oc cluster” and “minishift”, to make continuously improve these tools, as these are officially provided by Red Hat.
+
+What’s *minishift*? *minishift* is the definitive tool for local OpenShift for development. If you want to know more, don’t forget to read the final blog in this series.
