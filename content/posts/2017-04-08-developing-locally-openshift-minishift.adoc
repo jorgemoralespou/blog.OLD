@@ -1,10 +1,61 @@
 ---
-title: Developing locally with OpenShift - Bringing it all together
+title: Developing locally with OpenShift - minishift, bringing it all together
 kind: draft
-created_at: 2017-04-05 22:00:00 +0100
+created_at: 2017-04-08 12:00:00 +0100
 author_name: Jorge Morales
-read_time: 12 minutes
-tags: [openshift,origin,development,local,devexp,oc-cluster]
+read_time: 4 minutes
+tags: [openshift,origin,development,local,devexp,minishift,cdk]
 categories: [devexp]
-excerpt:
+excerpt: In this last post I'm introducing what is the definitive tool for working with OpenShift locally and where we'll be investing moving forward.
 ---
+We finally get to the last post of the series, and in this post I will introduce you to the tool that Developers will be using soon. It’s still not final and yet many features need to be planned and included, but will overcome all the problems I described in my previous posts.
+
+There’s already a good blog post from link:https://github.com/LalatenduMohanty[Lalatendu Mohanty] about link:https://developers.redhat.com/blog/2017/02/28/using-red-hat-container-development-kit-3-beta/[what CDKv3 is] so I will not go into many details. I will just simply quote him for what I consider the most important part:
+
+“Minishift is a fork of the Minikube project and uses libmachine to interact with the underlying virtualization software. It also uses OpenShift’s “cluster up” functionality for provisioning the local Origin/OCP cluster”
+
+Also:
+
+“At the moment, KVM, Virtualbox, Xhyve and HyperV are the supported hypervisors.”
+
+You should note that from this 2 sentences there is so many relevant things to mention:
+
+First, and foremost, the tool runs in a virtual machine, providing isolation from the host. Also, the support for the most common virtualization technologies across all major Operating Systems, providing consistency on where minishift can be run. And finally, minishift uses internally “oc cluster up” which is the preferred way to bootstrap a local cluster.
+
+One of the key aspects of minishift is that it is a tool created with developers in mind, so most of the shortcomings that “oc cluster” provides are meant to be overtaken by minishift. But, not only is a tool for developers, it’s also a tool to have reproducible OpenShift local environments. This aspect is key for some alternative use cases, like teaching or showing OpenShift capabilities in a reproducible manner. Evangelism of OpenShift will greatly benefit from the sweetness that minishift provides.
+
+As an example of things that are or will be shortly possible:
+
+* Reuse downloaded images from VM to VM
+* Provision a set of addons/bundles upon cluster creation
+* Modify cluster default behavior
+* Provide multiple openshift instances/profiles
+* Ability to pack and transfer files required to have a working environment
+
+== How to get started
+To work with minishift is as easy as it is to work with “oc cluster”. It’s a single go binary compiled for the different major developers operating systems (Windows, Mac and Linux). The only pre-requirement is that you have any of the supported virtualization technologies available on your workstation. Once you have the binary downloaded, and for convenience, added to the path, you can just issue one command:
+
+----
+$ minishift start
+----
+
+This command, which accepts a variety of configuration flags, does all you need to have OpenShift up and running. It will pull down a boot-2-docker iso (there’s also Centos and RHEL variants), it will create a VM using that iso image, and will do “oc cluster up” within the VM, with the appropriate configuration. After all the images have been pulled down (which can take a while) you’ll have a complete OpenShift all in one cluster running in a VM.
+
+Once you finish working, you just need to stop the VM, by doing:
+
+----
+$ minishift stop
+----
+
+Note that this will keep the VM in your workstation, so you can start and stop it several times being sure that your work will be preserved.
+
+Once you’re done, you can discard the VM and recover all used disc space, by doing:
+
+----
+$ minishift delete
+----
+
+== Conclusions
+Although minishift has not even hit version 1.0.0 GA it is already one of the easiest ways to work with Openshift locally. But the truth is that if the present is encouraging the future is promising, and we will see a great deal of capabilities being added moving forward that will keep simplifying developers life, so that a regular developer will not need to know how to install, manage, configure and operate and OpenShift cluster and will be able to keep focus in what should be important to him, develop applications that will ultimately run on an OpenShift cluster.
+
+I have to say that these past months where I’ve been working with the minishift team, they have proved that “being the tool of choice for developers” is their main goal, and they have been listening to all the feedback from the community to make the experience as easy as possible. I want to thank link:https://github.com/hferentschik[Hardy Ferentschik], link:https://github.com/LalatenduMohanty[Lalatendu Mohanty], link:https://github.com/praveenkumar[Praveen Kumar], link:https://github.com/budhrg[Budh Ram Gurung], link:https://github.com/gbraad[Gerard Braad], and the rest of the link:https://github.com/minishift/minishift/graphs/contributors[minishift team], and also specially link:https://github.com/jimmidyson[Jimmy Dyson] who started this project.
