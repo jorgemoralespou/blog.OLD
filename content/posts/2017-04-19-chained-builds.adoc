@@ -1,0 +1,236 @@
+---
+title: Enhancing your Builds on OpenShift. Chaining Builds.
+kind: article
+created_at: 2017-04-19 12:00:00 +0100
+author_name: Jorge Morales
+read_time: 16 minutes
+tags: [openshift,origin,development,local,devexp,minishift,build]
+categories: [build]
+excerpt: Chaining builds in OpenShift you can do fancy things like using an alternate builder tool, using an alternate runtime, or making a slim runtime image.
+---
+OpenShift provides different options for building and deploying containers on the platform.  These generally include:
+
+* *Build and deploy from application source code* - Users can specify the location of their source code in a GIT repository.  OpenShift will build the application binaries, then build the container images that include those binaries and deploy to OpenShift. Users can also specify a dockerfile as the source code to build container images from.
+* *Build and deploy from application binaries* - Users can also specify the location of their application binaries, coming from their existing application build process and tools.  OpenShift will just build the container images that include those provided binaries and deploy to OpenShift.
+* *Build outside of OpenShift* - Users can build their applications and container images completely outside of OpenShift, coming from their existing application and container image build process and tools, and specify the location of those images to pull in. OpenShift will just deploy those container image as provided.
+
+== Enhancing your Builds on OpenShift: Chaining Builds.
+As previously described, OpenShift provides a mechanism to bring your applications to run in containers on the platform, while abstracting much of the detail of the underlying container runtime, Kubernetes orchestration, and platform itself. This mechanism is called link:https://docs.openshift.org/latest/architecture/core_concepts/builds_and_image_streams.html#source-build[s2i (source-to-image)] which uses builder images to build your applications in containers. A builder image is a standard Docker/OCI image that contains additional builder scripts which can build your applications from source or binaries. In the case of Java, the builder images use Java build tools like Maven or Gradle to build an artifact type (jar, war, or ear) and will layer that on a java runtime (JDK, Tomcat, JBoss EAP, Wildfly-Swarm,...) and the end result result will be packaged as a new container image for your application and deployed as a container.
+
+In addition to the typical scenario of using source code as the input to a build, OpenShift build capabilities provides another build input type called “Image source”, that will stream content from one image (source) into another (destination).
+
+Using this, we can combine source from one or multiple source images. And we can pass one or multiple files and/or folders from a source image to a destination image. Once the destination image has been built it will be pushed into the registry (or an link:https://blog.openshift.com/pushing-application-images-to-an-external-registry/[external registry]), and will be ready to be deployed.
+
+image::/posts/images/chained_builds/image_source.png[Image Source]
+
+Using an image (or multiple) as the source of the content you want to stream into the destination image may appear unnecessarily complicated, but it opens the door to splitting the build process into two (or even more) different stages: *build* and *assemble*.
+
+The *build* stage will use a regular source to image process and will pull down your application source code from Git and build it into an application artifact, publishing a new image that contains the built artifact. That’s the sole goal for this stage. For this reason, we can have specialized images that will know how to build an application artifact (or binary) using building tools, like maven, Gradle, go, …
+
+The *assemble* stage will copy the binary artifact from the “source” image built in the previous stage and put it in a well known location that a runtime image will use to look for this artifact. Examples of such images could be Wildfly, JBoss EAP, Tomcat, Java OpenJDK, or even scratch (a special image without a base). In this stage we will just need to indicate where the are artifacts located in the source image and where they need to be copied in the destination image. The build process will create an image that will be pushed into the registry and will be known as the application image.
+
+image::/posts/images/chained_builds/chaining.png[Chaining builds]
+
+Now, I’m going to demonstrate this process with three different examples, that will give us the following benefits:
+
+* Build the app binaries with a regular s2i builder image and run the app using a vanilla (non s2i) image as the base image.
+* Build the app binaries with a custom s2i builder image with a build tool (like Gradle), and run the app using an officially supported s2i image as the base.
+* Make a minimal runtime image (which has many side benefits).
+
+NOTE: At the end of each example there is the complete code snippet that you can use to reproduce the example in your own environment.
+
+== Example 1: Maven builder + non-s2i Wildfly Runtime
+In this example I will use as runtime image a vanilla wildfly image, which will give me a smaller final image size compared to the s2i version of wildfly. I will use link:https://hub.docker.com/r/jboss/wildfly/[the community version of wildfly available at Docker Hub].
+
+image::/posts/images/chained_builds/1-wildfly-size.png[Wildfly image sizes]
+
+I’ll use link:https://github.com/minishift/minishift[minishift] to start a local OpenShift cluster on my laptop to run these examples, but any OpenShift environment will work.
+
+I’ll start my minishift environment:
+
+image::/posts/images/chained_builds/minishift_start.png[minishift start]
+
+Once I have my local environment up and running, I’ll create a new-project to isolate all the changes I do:
+
+image::/posts/images/chained_builds/1-newproject.png[New project]
+
+In this example, I’m going to chain two builds. The first build will use any of the available java based s2i builders in OpenShift, as I only want to build my Java artifact using maven. I’ll use the link:https://hub.docker.com/r/openshift/wildfly-101-centos7/[s2i-wildfly builder image], and will build a link:https://github.com/OpenShiftDemos/os-sample-java-web[sample Java application which I have available in GitHub]. Additionally I’ll give this build a name. Let’s keep it simple and call it “*builder*”.
+
+image::/posts/images/chained_builds/1-newbuild-builder.png[Builder image build]
+
+Once the build has finished, which you can verify by watching the build log, I’ll create a second build that will copy the generated artifact from the first build into the second. This second build will use jboss/wildfly image as base, and will copy the ROOT.war artifact from the builder image into the appropriate location. This second build will be a docker build and not a source build, like the previous. I’ll give this build a representative name again. This time the name will be “*runtime*”.
+
+image::/posts/images/chained_builds/1-newbuild-runtime.png[Runtime image build]
+
+Now I already have my runtime image built, with the application artifact. The only thing missing is to have the application deployed, so I’ll start a new-app from the “runtime” image, and will give it again a meaningful name, “*my-application*”. Then, I’ll create a route and verify that the application is up and running.
+
+image::/posts/images/chained_builds/1-new-app.png[New application]
+
+This is a simple example where I’m using a non-s2i image to run my application built in OpenShift. I could have used any Docker image, it doesn’t need to be jboss/wildfly, but I used this one since you already know where I work ;-)
+
+You’ll see this application like any other application on the OpenShift Overview.
+
+image::/posts/images/chained_builds/1-overview.png[Overview UI]
+
+The main difference is that your application will have two builds, and the application itself, the code, will be built by the “builder” build, in case you want to set a GitHub webhook for your source code.
+
+image::/posts/images/chained_builds/1-builds.png[Builds]
+
+If you want to exercise all the code yourself, you only need to copy and paste the following snippet, which is also available in link:https://github.com/jorgemoralespou/ose-chained-builds/blob/master/maven-jbosswildfly/example.sh[GitHub].
+
+[source,bash]
+----
+oc new-project maven-jbosswildfly
+oc new-build wildfly~https://github.com/OpenShiftDemos/os-sample-java-web --name=builder
+
+# watch the logs
+oc logs -f bc/builder --follow
+
+# Generated artifact is located in /wildfly/standalone/deployments/ROOT.war
+oc new-build --name=runtime --docker-image=jboss/wildfly \
+     --source-image=builder \
+     --source-image-path=/wildfly/standalone/deployments/ROOT.war:. \
+     --dockerfile=$'FROM jboss/wildfly\nCOPY ROOT.war /opt/jboss/wildfly/standalone/deployments/ROOT.war'
+
+
+oc logs -f bc/runtime --follow
+
+# Deploy and expose the app once built
+oc new-app runtime --name=my-application
+oc expose svc/my-application
+
+# Print the endpoint URL
+echo “Access the service at http://$(oc get route/my-application -o jsonpath='{.status.ingress[0].host}')/”
+----
+
+Let’s now explore a different use case for which chained builds can be helpful.
+
+== Example 2: Gradle builder + JDK Runtime
+What happens when you want to to run your application with our officially supported OpenJDK image which has been created to run your Java based microservices, but your source code needs to be built using “Gradle”, which is not available in that image?
+
+In this example I will leverage a builder image I created with support for Gradle (link:https://github.com/jorgemoralespou/s2i-java[jorgemoralespou/s2i-java]) for a link:https://blog.openshift.com/using-openshift-enterprise-grade-spring-boot-deployments/[previous post], and then, as in the previous example, I will copy the generated artifact into the official openjdk18-openshift image.
+
+For brevity I will only paste the snippet that does all, as the process was already explained in the previous example.
+
+The only caveat to this process is that you need to know where the built artifact is left in the builder image and where you need to place the artifact in the runtime image.
+
+[source,bash]
+----
+oc new-project gradle-jdk
+oc new-build jorgemoralespou/s2i-java~https://github.com/jorgemoralespou/s2i-java \
+   --context-dir=/test/test-app-gradle/ --name=builder
+
+sleep 1
+
+# watch the logs
+oc logs -f bc/builder --follow
+
+# Generated artifact is located in /wildfly/standalone/deployments/ROOT.war
+oc new-build --name=runtime \
+   --docker-image=registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift \
+   --source-image=builder --source-image-path=/opt/openshift/app.jar:. \
+   --dockerfile=$'FROM registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift\nCOPY app.jar /deployments/app.jar'
+
+sleep 1
+
+oc logs -f bc/runtime --follow
+
+# Deploy and expose the app once built
+oc new-app runtime --name=my-application
+oc expose svc/my-application
+
+# Print the endpoint URL
+echo “Access the service at http://$(oc get route/my-application -o jsonpath='{.status.ingress[0].host}')/”
+----
+
+We have created two different builds, one for building my application and another one for creating the runtime application.
+
+image::/posts/images/chained_builds/2-builds.png[Builds]
+
+The deployed application can be seen in the overview page.
+
+image::/posts/images/chained_builds/2-overview.png[Overview UI]
+
+Clicking on the route you’ll see the cool example in action.
+
+image::/posts/images/chained_builds/2-app.png[Application]
+
+As can be seen, in the process, there are 4 ImageStreams involved:
+
+image::/posts/images/chained_builds/2-imagestreams.png[ImageStreams]
+
+The two base images used, s2i-java for building using Gradle, and openjdk18-openshift to be used as base for running our application. Also there is a builder and runtime ImageStream as result of our builds. Our deployment is based on the “runtime” ImageStream.
+
+Now that we’ve seen how to use a different builder technology than the available in the images we want to run, let’s explore a final example on how to get a minimal runtime image.
+
+== Example 3: S2I Go builder + Scratch Runtime
+Go is a language where you run a “standalone” binary that can be statically compiled to have all the dependencies it requires. In this way, you can run a minimal image with a go binary that is easy to distribute.
+
+As there is no official go-s2i image, I have modified the one available in link:https://github.com/openshift-s2i/s2i-go[GitHub] to statically build a binary. The source code for this image is available in link:https://github.com/jorgemoralespou/s2i-go[GitHub] and the image is published in Docker Hub under link:https://hub.docker.com/r/jorgemoralespou/s2i-go/[jorgemoralespou/s2i-go]. Keep in mind this image has been built just to prove this use case and that given my lack of expertise in go, you shouldn’t trust it (or use it) for anything important.
+
+I have an example go application that is a web server showing a link:https://github.com/jorgemoralespou/ose-chained-builds/blob/master/go-scratch/hello_world/main.go[hello-world in GitHub], and will be used for this third example.
+
+As before, and given that the process is the same, I’ll just paste the code snippet that you can copy and paste in your terminal to verify yourself.
+
+[source,bash]
+------------
+oc new-project go-scratch
+oc import-image jorgemoralespou/s2i-go --confirm
+oc new-build s2i-go~https://github.com/jorgemoralespou/ose-chained-builds \
+   --context-dir=/go-scratch/hello_world --name=builder
+
+sleep 1
+
+# watch the logs
+oc logs -f bc/builder --follow
+
+# Generated artifact is located in /opt/app-root/src/go/src/main/main
+oc new-build --name=runtime \
+   --docker-image=scratch \
+   --source-image=builder \
+   --source-image-path=/opt/app-root/src/go/src/main/main:. \
+   --dockerfile=$'FROM scratch\nCOPY main /main\nEXPOSE 8080\nENTRYPOINT ["/main"]'
+
+sleep 1
+
+oc logs -f bc/runtime --follow
+
+# Deploy and expose the app once built
+oc new-app runtime --name=my-application
+oc expose svc/my-application
+
+# Print the endpoint URL
+echo “Access the service at http://$(oc get route/my-application -o jsonpath='{.status.ingress[0].host}')/”
+------------
+
+Once the process has finished, we can compare the size of the images. The builder image would be my application image if I wouldn’t have chained into a new build. The runtime image, as it is based off SCRATCH and has just the statically built binary, is 150x smaller in size.
+
+image::/posts/images/chained_builds/3-imagesize.png[Image sizes]
+
+== Make it simple, make it repeatable
+Now that we have set up 3 different use cases to which chaining builds can provide some benefit, we can abstract all these complexity in a template, so we just need to instantiate a template providing the location of our source code repository and the name of our application.
+
+image::/posts/images/chained_builds/3-template.png[Template]
+
+Additionally we can augment this template with any parameterization we might want to make configurable.
+
+It is also important to note that using some of the building capabilities provided by OpenShift we have set up an ImageChangeTrigger on the second build so there is no need to manually launch both builds. The second build will be started by OpenShift once the first has finished as a result of the new image being created by the first build.
+
+Using a template simplifies your user experience and provides you a mechanism to create this type of applications with a single command:
+
+[source,bash]
+----
+oc new-app go-scratch \
+           -p name=my-application \
+           -p GIT_URI= https://github.com/jorgemoralespou/ose-chained-builds \
+           -p CONTEXT_DIR=/go-scratch/hello_world
+----
+
+== Conclusions
+To conclude this article, I want you to think about all the capabilities that the platform provides and that sometimes are not obvious to us. With this technique, we can do much more fancy things, that I will show in a follow up blog.
+
+Also, as many of you would have probably figured out, there’s not only benefits in what I just showed. There will be two docker images being built, pushed and stored in the registry and there will be a bigger maintenance burden. But, the most important thing to understand is that the platform does not limit us in many ways that we could have thought of.
+
+As always, the complete content used for this blog is available in link:https://github.com/jorgemoralespou/ose-chained-builds[GitHub].
+
+I hope that this has given you some food for thought. Happy to chat about it.
