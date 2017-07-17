@@ -13,6 +13,7 @@ GEM
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     highline (1.7.8)
+    kramdown (0.14.1)
     mini_portile2 (2.1.0)
     multi_json (1.12.1)
     nanoc (4.7.5)
@@ -41,6 +42,7 @@ DEPENDENCIES
   adsf
   builder
   highline
+  kramdown
   nanoc
   nanoc-asciidoctor
   nanoc-git

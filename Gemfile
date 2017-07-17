@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 group 'nanoc' do
   gem 'nanoc'
   gem 'nanoc-asciidoctor'
+  gem 'kramdown'
   gem 'adsf'
   gem 'yajl-ruby','1.2.2'
   gem 'nokogiri'

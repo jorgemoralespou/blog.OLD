@@ -35,6 +35,19 @@ compile '/**/*.adoc' do
   layout '/page.*'
 end
 
+compile '/posts/*.md' do
+  filter :colorize_syntax, default_colorizer: :pygmentsrb
+  filter :kramdown
+  layout '/post.*'
+end
+
+# Process all blogposts as default layout converting adoc to rendered html
+compile '/**/*.md' do
+  filter :colorize_syntax, default_colorizer: :pygmentsrb
+  filter :kramdown
+  layout '/page.*'
+end
+
 # Process feed
 compile '/atom.xml' do
   filter :erb
@@ -48,7 +61,7 @@ route '/posts/*' do
 end
 
 # Rename html and adoc files to index.html
-route '/**/*.{html,adoc}' do
+route '/**/*.{html,adoc,md}' do
   if item.identifier =~ '/index.*'
     '/index.html'
   else
