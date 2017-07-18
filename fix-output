@@ -1,9 +1,3 @@
-# Instructions from here: https://nanoc.ws/doc/deploying/#with-git
-rm -rf output
-git clone . output
-cd output
-git checkout --orphan gh-pages
-git rm -rf .
-git remote rm origin
-git remote add origin https://github.com/jorgemoralespou/jorgemoralespou.github.io
-cd -
+git clone https://github.com/jorgemoralespou/jorgemoralespou.github.io output
+rm -rf tmp/
+bundle exec nanoc compile --verbose
