@@ -13,7 +13,7 @@
 #   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
 #   because “*” matches zero or more characters.
 
-require 'nanoc-asciidoctor'
+#require 'nanoc-asciidoctor'
 
 # Process every html file as default
 compile '/**/*.html' do

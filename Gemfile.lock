@@ -3,7 +3,6 @@ GEM
   specs:
     adsf (1.2.1)
       rack (>= 1.0.0)
-    asciidoctor (1.5.5)
     builder (3.1.4)
     colored (1.2)
     concurrent-ruby (1.0.5)
@@ -16,14 +15,11 @@ GEM
     kramdown (0.14.1)
     mini_portile2 (2.1.0)
     multi_json (1.12.1)
-    nanoc (4.7.5)
-      cri (~> 2.3)
+    nanoc (4.8.0)
+      cri (~> 2.8)
       ddplugin (~> 1.0)
       hamster (~> 3.0)
       ref (~> 2.0)
-    nanoc-asciidoctor (1.0.2)
-      asciidoctor (> 0.1, < 2.0)
-      nanoc (>= 3.6.7, < 5.0.0)
     nanoc-git (2.0.0)
       nanoc (~> 4.5)
     nokogiri (1.7.1)
@@ -44,7 +40,6 @@ DEPENDENCIES
   highline
   kramdown
   nanoc
-  nanoc-asciidoctor
   nanoc-git
   nokogiri
   pygments.rb
