@@ -1,18 +1,18 @@
 ---
-title: Deploy helm charts on minishift
+title: Deploy helm charts on OpenShift using minishift
 kind: article
 created_at: 2017-07-19 12:00:00 +0100
 author_name: Jorge Morales
 read_time: 7 minutes
 tags: [openshift,origin,development,local,devexp,minishift,build,helm]
 categories: [devexp]
-excerpt: In this blog I will describe how to deploy helm into minishift, and then I will deploy a sample application using a helm chart.
+excerpt: In this blog I will describe how to deploy helm into minishift OpenShift, and then I will deploy a sample application using a helm chart.
 ---
 For some time I've been listening hear and there about [Helm](https://github.com/kubernetes/helm) and have been asked about people how they could deploy into OpenShift applications defined as [Charts](https://github.com/kubernetes/charts), the format Helm uses to package an application.
 
 One of the really nice features that [minishift](https://github.com/minishift/minishift) >= 1.2.0 introduced was the concept of an [addon](https://docs.openshift.org/latest/minishift/using/addons.html) which is a way to provide additional capabilities to your minishift local environment. As this feature is really interesting, and evolving really nicely, I have developed some addons that allow me to extend my minishift capabilities by issuing a single command.
 
-In this blog I will describe how to deploy helm into minishift, and then I will deploy a sample application using a helm chart.
+In this blog I will describe how to deploy helm into minishift OpenShift, and then I will deploy a sample application using a helm chart.
 
 ## Helm in a Handbasket
 I have taken this part from the [helm documentation](https://github.com/kubernetes/helm#helm-in-a-handbasket), as it perfectly introduces helm in a few sentences:
