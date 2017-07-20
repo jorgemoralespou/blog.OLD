@@ -1,18 +1,20 @@
 ---
-title: Deploy helm charts on OpenShift using minishift
+title: Deploy helm charts on minishift's OpenShift for local development
 kind: article
 created_at: 2017-07-19 12:00:00 +0100
 author_name: Jorge Morales
 read_time: 7 minutes
 tags: [openshift,origin,development,local,devexp,minishift,build,helm]
 categories: [devexp]
-excerpt: In this blog I will describe how to deploy helm into minishift OpenShift, and then I will deploy a sample application using a helm chart.
+excerpt: In this blog I will describe how to deploy helm into minishift's  OpenShift, and then I will deploy a sample application using a helm chart. This blog mostly described how easy is to add functionalities to minishift by using addons.
 ---
-For some time I've been listening hear and there about [Helm](https://github.com/kubernetes/helm) and have been asked about people how they could deploy into OpenShift applications defined as [Charts](https://github.com/kubernetes/charts), the format Helm uses to package an application.
+For some time I've been hearing about [Helm](https://github.com/kubernetes/helm) and have been asked by people how they could deploy into OpenShift applications defined as [Charts](https://github.com/kubernetes/charts), the format Helm uses to package an application.
 
 One of the really nice features that [minishift](https://github.com/minishift/minishift) >= 1.2.0 introduced was the concept of an [addon](https://docs.openshift.org/latest/minishift/using/addons.html) which is a way to provide additional capabilities to your minishift local environment. As this feature is really interesting, and evolving really nicely, I have developed some addons that allow me to extend my minishift capabilities by issuing a single command.
 
 In this blog I will describe how to deploy helm into minishift OpenShift, and then I will deploy a sample application using a helm chart.
+
+**Note that this is not supported and it is used for the solely purpose of supporting and describing the work that has been done around minishift addons. If you want to use what here is described, it’s at your own risk.**
 
 ## Helm in a Handbasket
 I have taken this part from the [helm documentation](https://github.com/kubernetes/helm#helm-in-a-handbasket), as it perfectly introduces helm in a few sentences:
@@ -32,7 +34,7 @@ There is already a [guide on how to install minishift](https://docs.openshift.or
 
 I will also expect that you're using the latest minishift version available today (1.3.0) or a newer one, if there is one already available as you read this.
 
-Presumming that you read this blog as soon as it is published, and that you don't have a minishift instance already up and running, this is the process you would follow to be able to continue with the blog.
+Presuming that you read this blog as soon as it is published, and that you don't have a minishift instance already up and running, this is the process you would follow to be able to continue with the blog.
 
 First, I will install the default addons that come shipped with minishift, and then I will enable an addon that will create an **admin** user, so I can easily log into the minishift OpenShift web UI as admin of the platform.
 
@@ -43,7 +45,7 @@ $ minishift addons enable admin-user
 
 This process instructs every minishift instance that will be created from this point to install this addon, so it's a one time step.
 
-Now, I will create my minishift instance. I'm using the latest available openshift version as the time of writing, but you could just be using the default shipped with minishift. Also, I'm using virtualbox as virtualization technology, but you could again be using the one you prefer from all the available technologies for your Operating System. And also, I like to give the VM enough cpu and memory so that I can confortably work.
+Now, I will create my minishift instance. I'm using the latest available openshift version as the time of writing, but you could just be using the default shipped with minishift. Also, I'm using virtualbox as virtualization technology, but you could again be using the one you prefer from all the available technologies for your Operating System. And also, I like to give the VM enough cpu and memory so that I can comfortably work.
 
 ~~~
 $ minishift start --vm-driver=virtualbox --openshift-version=v3.6.0-rc.0 --cpus=2 --memory=8192
@@ -122,12 +124,21 @@ We will be able to see **tiller** deployed in the **kube-system** namespace.
 
 ![Tiller overview](/posts/images/helm_on_minishift/tiller_overview.png)
 
-As you would probably have noticed, it's the "#2" deployment. This is mostly because the original helm deployment has been altered to use a dedicated serviceaccount **helm**, that will be given the required permissions **cluster-admin**. This is in order to make the deployment as secure as possible.
+As you would probably have noticed, it's the "#2" deployment. This is mostly because the original helm deployment has been altered to use a dedicated serviceaccount **helm**, that will be given the required permissions **cluster-admin**. As I like to do, I tried to minimize who will get this escalated permissions to just the serviceaccount tiller will use.
 
-Also, tiller is exposed through a route that we will use later.
+**NOTE:** Helm currently has a shortcoming when it comes to work nicely in multitenant environments. *Tiller* requires **cluster-admin** role to properly work, and it’s not possible to install in an unprivileged manner in your own project/namespace to provide you with the ability to deploy applications there.This is in order to make the deployment as secure as possible.
+
+Also, tiller is exposed through a routenodePort that we will use later. We create an environment variable to refer to tiller.
+
+~~~
+$ export TILLER_HOST="$(minishift ip):$(oc get svc/tiller -o jsonpath='{.spec.ports[0].nodePort}' -n kube-system --as=system:admin)"
+
+$ echo $TILLER_HOST
+192.168.99.100:30609
+~~~
 
 ## Install helm (client side)
-It is time to configure our client helm to use tiller in minishift. I presumme you have already installed the helm binary and added to the path, so you can use helm client.
+It is time to configure our client helm to use tiller in minishift. I presume you have already installed the helm binary and added to the path, so you can use helm client.
 
 To verify it:
 
